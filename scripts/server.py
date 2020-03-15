@@ -6,8 +6,10 @@ import BaseHTTPServer
 import threading
 import time
 import os
+import subprocess
 
-ADDRESS = "10.0.42.1"
+proc = subprocess.Popen('hostname -I', shell=True, stdout=subprocess.PIPE)
+ADDRESS = proc.communicate()[0].split(" ")[0]
 PORT = "3000"
 run = True
 
@@ -70,8 +72,6 @@ def kill_server():
 
 try:
 	rospy.init_node('server', anonymous=False)
-
-	ADDRESS = rospy.get_param("~address", "10.0.42.1")
 	PORT = rospy.get_param("~port", "3000")
 
 	httpd = BaseHTTPServer.HTTPServer((ADDRESS, PORT), ServerHandler)

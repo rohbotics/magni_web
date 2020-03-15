@@ -43,12 +43,6 @@ function sendTwist(forward, rotate){
 	cmdVel.publish(twist);
 }
 
-var twisttopic = new ROSLIB.Topic({
-	ros : ros,
-	name : '/cmd_vel',
-	messageType : 'geometry_msgs/Twist'
-});
-
 var batterytopic = new ROSLIB.Topic({
 	ros : ros,
 	name : '/battery_state',
@@ -58,15 +52,21 @@ var batterytopic = new ROSLIB.Topic({
 var imageTopic = new ROSLIB.Topic({
 	ros : ros,
 	name : '/camera/image/compressed',
+	//name : '/usb_cam/image_raw/compressed',
 	messageType : 'sensor_msgs/CompressedImage'
 });
 
-twisttopic.subscribe(function(data) {
-	console.log('Received message on ' + twisttopic.name + ': ' + data);
-	document.getElementById("battery").innerHTML = "Battery Voltage: "+data.linear.x+" "+data.angular.z+" V";
+imageTopic.subscribe(function(msg) {
+	console.log('Received message on ' + imageTopic.name + ': ' + JSON.stringify(msg.data));
+
+	if(window.matchMedia("(orientation:portrait)").matches)
+		document.getElementById("pvideostream").src = "data:image/jpg;base64,"+msg.data;
+	else
+		document.getElementById("lvideostream").src = "data:image/jpg;base64,"+msg.data
+
 });
 
-batterytopic.subscribe(function(data) {
-	console.log('Received message on ' + batterytopic.name + ': ' + JSON.stringify(data));
-	//document.getElementById("battery").innerHTML = "Battery Voltage: "+message.data.linear.x+" "+message.data.angular.z+" V";
+batterytopic.subscribe(function(msg) {
+	console.log('Received message on ' + batterytopic.name + ': ' + JSON.stringify(msg));
+	document.getElementById("battery").innerHTML = "Battery Voltage: "+(Math.round(parseFloat(msg.voltage)*10)/10)+" V";
 });
