@@ -1,0 +1,18 @@
+<launch>
+
+	<group ns="rosbridge_ws"> 
+		<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+			<arg name="ssl" value="false" />
+			<arg name="port" value="9090" />
+		</include>
+	</group>
+
+	<node name="tf2_web_republisher" pkg="tf2_web_republisher" type="tf2_web_republisher"/>
+
+	<include file="$(find raspicam_node)/launch/camerav2_410x308_30fps.launch" />
+
+	<node name="server" pkg="magni_web" type="server.py" output="screen">
+		<param name="port" value="3000" />
+	</node>
+
+</launch>
