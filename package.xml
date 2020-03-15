@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package>
+  <name>magni_web</name>
+  <version>0.0.1</version>
+  <description>Control a ROS robot through a web interface.</description>
+
+  <maintainer email="vid.rijavec@gmail.com">Vid Rijavec</maintainer>
+
+  <license>MIT</license>
+
+  <author>Vid Rijavec</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>std_msgs</run_depend>
+</package>
