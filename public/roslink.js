@@ -68,5 +68,9 @@ imageTopic.subscribe(function(msg) {
 
 batterytopic.subscribe(function(msg) {
 	console.log('Received message on ' + batterytopic.name + ': ' + JSON.stringify(msg));
-	document.getElementById("battery").innerHTML = "Battery Voltage: "+(Math.round(parseFloat(msg.voltage)*10)/10)+" V";
+
+	let voltage = Math.round(parseFloat(msg.voltage)*10)/10;
+	let percentage = Math.round(parseFloat(msg.percentage)*100);
+
+	document.getElementById("battery").innerHTML = "Battery: "+voltage+"V "+percentage+"%";
 });
