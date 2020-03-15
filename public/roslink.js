@@ -51,7 +51,7 @@ var batterytopic = new ROSLIB.Topic({
 
 var imageTopic = new ROSLIB.Topic({
 	ros : ros,
-	name : '/camera/image/compressed',
+	name : '/raspicam_node/image/compressed',
 	//name : '/usb_cam/image_raw/compressed',
 	messageType : 'sensor_msgs/CompressedImage'
 });
