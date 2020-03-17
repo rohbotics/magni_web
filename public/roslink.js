@@ -28,7 +28,7 @@ var cmdVel = new ROSLIB.Topic({
 });
 
 function sendTwist(forward, rotate){
-	var twist = new ROSLIB.Message({
+	let twist = new ROSLIB.Message({
 		linear : {
 			x : forward,
 			y : 0,
@@ -66,11 +66,22 @@ imageTopic.subscribe(function(msg) {
 
 });
 
+var battery = {
+	voltage: 26.0,
+	percentage: 0.0
+}
+
 batterytopic.subscribe(function(msg) {
 	console.log('Received message on ' + batterytopic.name + ': ' + JSON.stringify(msg));
 
-	let voltage = Math.round(parseFloat(msg.voltage)*10)/10;
-	let percentage = Math.round(parseFloat(msg.percentage)*100);
+	battery.voltage = parseFloat(msg.voltage) * 0.1 + battery.voltage * 0.9;
+	battery.percentage = parseFloat(msg.percentage) * 0.1 + battery.percentage * 0.9;
 
-	document.getElementById("battery").innerHTML = "Battery: "+voltage+"V "+percentage+"%";
+	let displayvolt = Math.round(battery.voltage*10)/10;
+	let displayperc = Math.round(battery.percentage)*100;
+
+	if(window.matchMedia("(orientation:portrait)").matches)
+		document.getElementById("pbattery").innerHTML = "Battery: "+displayvolt.toFixed(1)+"V "+displayperc+"%";
+	else
+		document.getElementById("lbattery").innerHTML = "Battery: "+displayvolt.toFixed(1)+"V "+displayperc+"%";
 });
