@@ -32,8 +32,14 @@
 
 		<div class="modal-content">
 			<span class="close zoom" onclick="closeModal('recordModal')">&times;</span>
-			<h1>Capture ROS Bag</h1>
-			<p>Select topics you would like to record:</p>
+			<h1>Record Telemetry and Video</h1>
+
+			<label for="savepath">Save location:</label>
+			<select id="savepath">
+
+			</select>
+
+			<p>Topics you would like to record:</p>
 			<div id="rostopics" class="container">
 				<!-- Add ROS topics here dynamically. -->
 			</div>

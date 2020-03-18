@@ -56,15 +56,9 @@ class ServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 		filename = filename.split('?v=')[0]
 
-		if filename.endswith('roslink.js'):
-			with open(filename, 'rb') as file:
-				data = file.read()
-				data = data.replace("IP_ADDRESS = '10.0.42.1'","IP_ADDRESS = '"+ADDRESS+"'")
-				self.wfile.write(data)
-		else:
-			with open(filename, 'rb') as file:
-				data = file.read()
-				self.wfile.write(data)
+		with open(filename, 'rb') as file:
+			data = file.read()
+			self.wfile.write(data)
 
 def kill_server():
 	run = False

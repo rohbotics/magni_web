@@ -1,11 +1,7 @@
 'use strict';
 
-//IP_ADDRESS and PORT get dynamically altered by the server, DO NOT TOUCH
-
-var IP_ADDRESS = '10.0.42.1';
-var PORT = '9090';
-
 var topicsList = [];
+var drives = [];
 
 var velocity = {
 	angular: 0.5,
@@ -18,7 +14,7 @@ var battery = {
 };
 
 var ros = new ROSLIB.Ros({
-	url : 'ws://'+IP_ADDRESS+':'+PORT
+	url : 'ws://'+window.location.hostname+':'+9090
 });
 
 ros.on('connection', function() {
@@ -51,6 +47,24 @@ var imageTopic = new ROSLIB.Topic({
 	name : '/raspicam_node/image/compressed',
 	//name : '/usb_cam/image_raw/compressed',
 	messageType : 'sensor_msgs/CompressedImage'
+});
+
+var topicsClient = new ROSLIB.Service({
+    ros : ros,
+    name : '/rosapi/topics',
+    serviceType : 'rosapi/Topics'
+});
+
+var disk_list = new ROSLIB.Service({
+	ros : ros,
+	name : '/disk_list',
+	serviceType : 'magni_web/DiskList'
+});
+
+var rosbag_recorder = new ROSLIB.Service({
+	ros : ros,
+	name : '/rosbag_recorder',
+	serviceType : 'magni_web/BagRecord'
 });
 
 function updateLinear(val){
@@ -110,16 +124,38 @@ batterytopic.subscribe(function(msg) {
 	document.getElementById("batt_percentage").innerHTML = "Percentage: "+displayperc+" %";
 });
 
-var topicsClient = new ROSLIB.Service({
-    ros : ros,
-    name : '/rosapi/topics',
-    serviceType : 'rosapi/Topics'
-});
 
 
 function updateTopics() {
-    let request = new ROSLIB.ServiceRequest();
-    topicsClient.callService(request, function(result) {
+
+	disk_list.callService(new ROSLIB.ServiceRequest(), function(result) {
+		let list = JSON.parse(result.lsblk).blockdevices;
+
+		drives = [];
+
+		for (let i = 0; i < list.length; i++) {
+			if(list[i].name.startsWith("sd"))
+				drives.push(list[i])
+		}
+
+		for (let i = 0; i < drives.length; i++) {
+			let tag = drives[i].name + " " + (parseInt(drives[i].size.split(",")[0])+1)+"GB ";
+
+			if(drives[i].children.length == 1){
+				let split = drives[i].children[0].mountpoint.split("/");
+				tag += split[split.length-1];
+				drives[i].path = drives[i].children[0].mountpoint;
+			}
+			else if (drives[i].name == "sda"){
+				tag += result.homedir;
+				drives[i].path = result.homedir;
+			}
+
+			drives[i].tag = tag;
+		}
+	});
+
+    topicsClient.callService(new ROSLIB.ServiceRequest(), function(result) {
 	    topicsList = result.topics;
     });
 };

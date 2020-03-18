@@ -12,23 +12,35 @@ class Recorder:
 	def __init__(self):
 		rospy.init_node('bag_recorder', anonymous=False)
 
-		self.disklister = rospy.Service('disk_list', DiskList, disklist)
-		self.recorder = rospy.Service('rosbag_recorder', BagRecord, recording)
+		self.disklister = rospy.Service('disk_list', DiskList, self.disklist)
+		self.recorder = rospy.Service('rosbag_recorder', BagRecord, self.recording)
 
-		self.recording = False;
-		self.rec_proc = None;
+		self.recording = False
+		self.proc_PID = None
 
 		print("Bag recorder ready.")
 
-	def disklist(request):
-		proc = subprocess.Popen('lsblk -J', shell=True, stdout=subprocess.PIPE)
-		return DiskList(proc.communicate()[0])
+	def disklist(self, request):
+		proc = subprocess.Popen('lsblk -J', shell=True, stdout=subprocess.PIPE) 
+		lsblk = proc.communicate()[0]
 
-	def recording(request):
-		print(request.topics)
-		print(request.path)
-		print(request.start)
-		return;
+		proc = subprocess.Popen('echo $HOME', shell=True, stdout=subprocess.PIPE) 
+		homedir = proc.communicate()[0]
+
+		return [lsblk, homedir]
+
+	def recording(self, request):
+
+		if request.start:
+			command = '/opt/ros/kinetic/bin/rosbag record -q -o ' + request.path.replace("\n","") +"/rec " + " ".join(request.topics)
+			print(command)
+			proc = subprocess.Popen(command, preexec_fn=os.setsid) 
+			self.proc_PID = proc.pid
+		elif self.proc_PID != None:
+			os.killpg(self.proc_PID, signal.SIGINT)
+			self.proc_PID = None
+
+		return [];
 
 try:
 	rec = Recorder()
