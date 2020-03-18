@@ -4,4 +4,7 @@
 		<param name="port" value="3000" />
 	</node>
 
+	<node name="bag_recorder" pkg="magni_web" type="bag_recorder.py" output="screen">
+	</node>
+
 </launch>
