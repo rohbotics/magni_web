@@ -1,7 +1,32 @@
+h1 {
+	font-family: Monospaced !important;
+	color: white;
+	font-size: 2vw;
+	display: block;
+}
+
 h2 {
 	color: white;
 	font-family: Monospaced !important;
 	font-size: 1.3vw;
+	display: block;
+}
+
+#lbatteryicon{
+	height: 3.5vw;
+	display: inline-block;
+}
+
+#lrecordicon{
+	height: 3.5vw;
+	display: inline-block;
+	margin-right: 1vw;
+}
+
+#lsettingsicon{
+	height: 3.5vw;
+	display: inline-block;
+	margin-right: 1vw;
 }
 
 #landscape{

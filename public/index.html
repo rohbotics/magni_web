@@ -14,41 +14,78 @@
 
 	<script src="roslib.min.js"></script>
 	<script src="roslink.js"></script>
-	<script src="init.js"></script>
+	<script src="main.js"></script>
+	<script src="modal.js"></script>
+
+	<div id="batteryModal" class="modal">
+
+		<div class="modal-content">
+			<span class="close zoom" onclick="closeModal('batteryModal')">&times;</span>
+			<h1>Battery Info</h1>
+			<h2 id="batt_voltage">Voltage: --.- V</h2>
+			<h2 id="batt_percentage">Percentage: --- %</h2>
+		</div>
+
+	</div>
+
+	<div id="recordModal" class="modal">
+
+		<div class="modal-content">
+			<span class="close zoom" onclick="closeModal('recordModal')">&times;</span>
+			<h1>Capture ROS Bag</h1>
+			<p>Select topics you would like to record:</p>
+			<div id="rostopics" class="container">
+				<!-- Add ROS topics here dynamically. -->
+			</div>
+			<button id="recbutton" type="button" style="margin-top: 5px" onclick="recording()">Start recording.</button>
+		</div>
+
+	</div>
+
+	<div id="settingsModal" class="modal">
+
+		<div class="modal-content">
+			<span class="close zoom" onclick="closeModal('settingsModal')">&times;</span>
+			<h1>Settings</h1>
+			<p id="lineartext">Linear speed: 0.5</p>
+			<input type="range" min="0.05" max="1.5" value="0.5" step="0.05" class="slider" id="linearSlider" oninput="updateLinear(this.value)">
+			<p id="angulartext">Angular speed: 0.5</p>
+			<input type="range" min="0.05" max="1.5" value="0.5" step="0.05" class="slider" id="angularSlider" oninput="updateAngular(this.value)">
+		</div>
+
+	</div>
 
 	<div id="portrait">
 
 		<img id="logo" src="assets/img/logo.png">
 
 		<div style="width:100%; height:40%;">
-			<img id="pvideostream" src="assets/img/novideo.jpg">
-		</div>
-
-		<div style="width:100%; height:10%; background-color: 'red';">
-
+			<img id="pvideostream" src="assets/img/novideo.jpg" onclick="openBatteryModal('batteryModal');">
 		</div>
 
 		<div style="width:100%; height:60%;">
 
-			<div style="position:absolute; bottom:80vw; right:15vw; margin-top:0.5vw;">
-				<h2 id="pbattery" >Battery: ----V --%</h2>
+			<div style="position:absolute; bottom:80vw; right:15vw; margin-top:1.0vw;">
+				<img id="psettingsicon" class="zoom" src="assets/img/settings.svg" onclick="openModal('settingsModal');">
+				<img id="precordicon" class="zoom" src="assets/img/record_off.svg" onclick="openModal('recordModal'); setModalTopics();">
+				<img id="pbatteryicon" class="zoom" src="assets/img/unknown.svg" onclick="openModal('batteryModal');">
 			</div>
 
 			<div style="position:absolute; bottom:8vw; left:13vw;">
 				<div>
-					<img id="pforward_left" class="arrow noselect" src="assets/img/left.svg" onmousedown="mouseEvent(0.5,0.5,'pforward_left')" ontouchstart="touchEvent(0.5,0.5,'pforward_left')">
-					<img id="pforward" class="arrow noselect" src="assets/img/arrow.svg" onmousedown="mouseEvent(0.5,0.0,'pforward')" ontouchstart="touchEvent(0.5,0.0,'pforward')">
-					<img id="pforward_right" class="arrow noselect" src="assets/img/right.svg" onmousedown="mouseEvent(0.5,-0.5,'pforward_right')" ontouchstart="touchEvent(0.5,-0.5,'pforward_right')">
+					<img id="pforward_left" class="arrow noselect zoom" src="assets/img/left.svg" onmousedown="mouseEvent(1.0,1.0,'pforward_left')" ontouchstart="touchEvent(1.0,1.0,'pforward_left')">
+					<img id="pforward" class="arrow noselect zoom" src="assets/img/arrow.svg" onmousedown="mouseEvent(1.0,0.0,'pforward')" ontouchstart="touchEvent(1.0,0.0,'pforward')">
+					<img id="pforward_right" class="arrow noselect zoom" src="assets/img/right.svg" onmousedown="mouseEvent(1.0,-1.0,'pforward_right')" ontouchstart="touchEvent(1.0,-1.0,'pforward_right')">
 				</div>
 				<div>
-					<img id="pleft" class="arrow noselect" src="assets/img/left_circle.svg" onmousedown="mouseEvent(0.0,0.5,'pleft')" ontouchstart="touchEvent(0.0,0.5,'pleft')">
-					<img id="pstop" class="arrow noselect" src="assets/img/stop.svg" onmousedown="mouseEvent(0.0,0.0,'pstop')" ontouchstart="touchEvent(0.0,0.0,'pstop')">
-					<img id="pright" class="arrow noselect" src="assets/img/right_circle.svg" onmousedown="mouseEvent(0.0,-0.5,'pright')" ontouchstart="touchEvent(0.0,-0.5,'pright')">
+					<img id="pleft" class="arrow noselect zoom" src="assets/img/left_circle.svg" onmousedown="mouseEvent(0.0,1.0,'pleft')" ontouchstart="touchEvent(0.0,1.0,'pleft')">
+					<img id="pstop" class="arrow noselect zoom" src="assets/img/stop.svg" onmousedown="mouseEvent(0.0,0.0,'pstop')" ontouchstart="touchEvent(0.0,0.0,'pstop')">
+					<img id="pright" class="arrow noselect zoom" src="assets/img/right_circle.svg" onmousedown="mouseEvent(0.0,-1.0,'pright')" ontouchstart="touchEvent(0.0,-1.0,'pright')">
 				</div>
 				<div>
-					<img id="pbackward_left" class="arrow noselect" src="assets/img/leftdown.svg" onmousedown="mouseEvent(-0.5,-0.5,'pbackward_left')" ontouchstart="touchEvent(-0.5,-0.5,'pbackward_left')">
-					<img id="pbackward" class="arrow noselect" src="assets/img/arrowdown.svg" onmousedown="mouseEvent(-0.5,0.0,'pbackward')" ontouchstart="touchEvent(-0.5,0.0,'pbackward')">
-					<img id="pbackward_right" class="arrow noselect" src="assets/img/rightdown.svg" onmousedown="mouseEvent(-0.5,0.5,'pbackward_right')" ontouchstart="touchEvent(-0.5,0.5,'pbackward_right')">
+					<img id="pbackward_left" class="arrow noselect zoom" src="assets/img/leftdown.svg" onmousedown="mouseEvent(-1.0,-1.0,'pbackward_left')" ontouchstart="touchEvent(-1.0,-1.0,'pbackward_left')">
+					<img id="pbackward" class="arrow noselect zoom" src="assets/img/arrowdown.svg" onmousedown="mouseEvent(-1.0,0.0,'pbackward')" ontouchstart="touchEvent(-1.0,0.0,'pbackward')">
+					<img id="pbackward_right" class="arrow noselect zoom" src="assets/img/rightdown.svg" onmousedown="mouseEvent(-1.0,1.0,'pbackward_right')" ontouchstart="touchEvent(-1.0,1.0,'pbackward_right')">
 				</div>
 			</div>
 
@@ -67,17 +104,19 @@
 		<div class="column" style="width: 20%;"></div>
 
 		<div style="position:absolute; bottom:0px; right:0px; margin-bottom:6vw">
-			<img id="lleft" class="arrow noselect" style="display:inline-block;" src="assets/img/left_circle.svg" onmousedown="mouseEvent(0.0,0.5,'lleft')" ontouchstart="touchEvent(0.0,0.5,'lleft')">
-			<img id="lright" class="arrow noselect" style="display:inline-block;" src="assets/img/right_circle.svg" onmousedown="mouseEvent(0.0,-0.5,'lright')" ontouchstart="touchEvent(0.0,-0.5,'lright')">
+			<img id="lleft" class="arrow noselect zoom" style="display:inline-block;" src="assets/img/left_circle.svg" onmousedown="mouseEvent(0.0,1.0,'lleft')" ontouchstart="touchEvent(0.0,1.0,'lleft')">
+			<img id="lright" class="arrow noselect zoom" style="display:inline-block;" src="assets/img/right_circle.svg" onmousedown="mouseEvent(0.0,-1.0,'lright')" ontouchstart="touchEvent(0.0,-1.0,'lright')">
 		</div>
 
 		<div style="position:absolute; bottom:0px; left:5vw; margin-bottom:2vw;">
-			<img id="lforward" class="arrow noselect" style="display:block;" src="assets/img/arrow.svg" onmousedown="mouseEvent(0.5,0.0,'lforward')" ontouchstart="touchEvent(0.5,0.0,'lforward')">
-			<img id="lbackward" class="arrow noselect" style="display:block;" src="assets/img/arrowdown.svg" onmousedown="mouseEvent(-0.5,0.0,'lbackward')" ontouchstart="touchEvent(-0.5,0.0,'lbackward')">
+			<img id="lforward" class="arrow noselect zoom" style="display:block;" src="assets/img/arrow.svg" onmousedown="mouseEvent(1.0,0.0,'lforward')" ontouchstart="touchEvent(1.0,0.0,'lforward')">
+			<img id="lbackward" class="arrow noselect zoom" style="display:block;" src="assets/img/arrowdown.svg" onmousedown="mouseEvent(-1.0,0.0,'lbackward')" ontouchstart="touchEvent(-1.0,0.0,'lbackward')">
 		</div>
 
-		<div style="position:absolute; top:0px; right:1vw; margin-top:0.5vw;">
-			<h2 id="lbattery">Battery Voltage: ---- V</h2>
+		<div style="position:absolute; top:0px; right:1vw; margin-top:1.0vw;">
+			<img id="lsettingsicon" class="zoom" src="assets/img/settings.svg" onclick="openModal('settingsModal');">
+			<img id="lrecordicon" class="zoom" src="assets/img/record_off.svg" onclick="openModal('recordModal'); setModalTopics();">
+			<img id="lbatteryicon" class="zoom" src="assets/img/unknown.svg" onclick="openModal('batteryModal');">
 		</div>
 
 	</div>

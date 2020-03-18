@@ -5,12 +5,25 @@
 var IP_ADDRESS = '10.0.42.1';
 var PORT = '9090';
 
+var topicsList = [];
+
+var velocity = {
+	angular: 0.5,
+	linear: 0.5
+};
+
+var battery = {
+	voltage: 26.0,
+	percentage: 0.7
+};
+
 var ros = new ROSLIB.Ros({
 	url : 'ws://'+IP_ADDRESS+':'+PORT
 });
 
 ros.on('connection', function() {
 	console.log('Connected to websocket server.');
+	updateTopics();
 });
 
 ros.on('error', function(error) {
@@ -27,22 +40,6 @@ var cmdVel = new ROSLIB.Topic({
 	messageType : 'geometry_msgs/Twist'
 });
 
-function sendTwist(forward, rotate){
-	let twist = new ROSLIB.Message({
-		linear : {
-			x : forward,
-			y : 0,
-			z : 0
-		},
-		angular : {
-			x : 0,
-			y : 0,
-			z : rotate
-		}
-	});
-	cmdVel.publish(twist);
-}
-
 var batterytopic = new ROSLIB.Topic({
 	ros : ros,
 	name : '/battery_state',
@@ -56,32 +53,73 @@ var imageTopic = new ROSLIB.Topic({
 	messageType : 'sensor_msgs/CompressedImage'
 });
 
+function updateLinear(val){
+	velocity.linear = val;
+	document.getElementById("lineartext").innerHTML = "Linear speed: "+velocity.linear
+}
+
+function updateAngular(val){
+	velocity.angular = val;
+	document.getElementById("angulartext").innerHTML = "Angular speed: "+velocity.angular
+}
+
+function sendTwist(forward, rotate){
+	let twist = new ROSLIB.Message({
+		linear : {
+			x : forward * velocity.linear,
+			y : 0,
+			z : 0
+		},
+		angular : {
+			x : 0,
+			y : 0,
+			z : rotate * velocity.angular
+		}
+	});
+	cmdVel.publish(twist);
+}
+
 imageTopic.subscribe(function(msg) {
-	console.log('Received message on ' + imageTopic.name + ': ' + JSON.stringify(msg.data));
+	//console.log('Received message on ' + imageTopic.name + ': ' + JSON.stringify(msg.data));
 
 	if(window.matchMedia("(orientation:portrait)").matches)
 		document.getElementById("pvideostream").src = "data:image/jpg;base64,"+msg.data;
 	else
 		document.getElementById("lvideostream").src = "data:image/jpg;base64,"+msg.data
-
 });
 
-var battery = {
-	voltage: 26.0,
-	percentage: 0.0
-}
-
 batterytopic.subscribe(function(msg) {
-	console.log('Received message on ' + batterytopic.name + ': ' + JSON.stringify(msg));
+	//console.log('Received message on ' + batterytopic.name + ': ' + JSON.stringify(msg));
 
 	battery.voltage = parseFloat(msg.voltage) * 0.1 + battery.voltage * 0.9;
 	battery.percentage = parseFloat(msg.percentage) * 0.1 + battery.percentage * 0.9;
 
 	let displayvolt = Math.round(battery.voltage*10)/10;
-	let displayperc = Math.round(battery.percentage)*100;
+	let imageperc = Math.ceil(battery.percentage*4)*25;
+	let displayperc = Math.round(battery.percentage*100);
+
+	let icon;
 
 	if(window.matchMedia("(orientation:portrait)").matches)
-		document.getElementById("pbattery").innerHTML = "Battery: "+displayvolt.toFixed(1)+"V "+displayperc+"%";
+		icon = document.getElementById("pbatteryicon");
 	else
-		document.getElementById("lbattery").innerHTML = "Battery: "+displayvolt.toFixed(1)+"V "+displayperc+"%";
+		icon = document.getElementById("lbatteryicon");
+
+	icon.src = "assets/img/"+imageperc+".svg";
+	document.getElementById("batt_voltage").innerHTML = "Voltage: "+displayvolt.toFixed(1)+" V";
+	document.getElementById("batt_percentage").innerHTML = "Percentage: "+displayperc+" %";
 });
+
+var topicsClient = new ROSLIB.Service({
+    ros : ros,
+    name : '/rosapi/topics',
+    serviceType : 'rosapi/Topics'
+});
+
+
+function updateTopics() {
+    let request = new ROSLIB.ServiceRequest();
+    topicsClient.callService(request, function(result) {
+	    topicsList = result.topics;
+    });
+};
