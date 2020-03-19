@@ -5,7 +5,10 @@ import rospy
 import time
 import os
 import subprocess
+import psutil
+import signal
 
+from os.path import expanduser
 from magni_web.srv import BagRecord, DiskList
 
 class Recorder:
@@ -16,7 +19,7 @@ class Recorder:
 		self.recorder = rospy.Service('rosbag_recorder', BagRecord, self.recording)
 
 		self.recording = False
-		self.proc_PID = None
+		self.proc = None
 
 		print("Bag recorder ready.")
 
@@ -32,13 +35,17 @@ class Recorder:
 	def recording(self, request):
 
 		if request.start:
-			command = '/opt/ros/kinetic/bin/rosbag record -q -o ' + request.path.replace("\n","") +"/rec " + " ".join(request.topics)
-			print(command)
-			proc = subprocess.Popen(command, preexec_fn=os.setsid) 
-			self.proc_PID = proc.pid
-		elif self.proc_PID != None:
-			os.killpg(self.proc_PID, signal.SIGINT)
-			self.proc_PID = None
+
+			command = '/opt/ros/kinetic/bin/rosbag record -b 512 -q -o ' + request.path.replace("\n","") +"/rec " + " ".join(request.topics)
+			self.proc = subprocess.Popen(command, stdin=subprocess.PIPE, shell=True, cwd="/tmp/")
+
+		elif self.proc != None:
+			
+			process = psutil.Process(self.proc.pid)
+			for subProcess in process.children(recursive=True):
+				subProcess.send_signal(signal.SIGINT)
+			self.proc.wait()
+			self.proc = None
 
 		return [];
 

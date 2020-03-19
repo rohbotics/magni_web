@@ -1,12 +1,5 @@
-'use strict';
-
 var topicsList = [];
 var drives = [];
-
-var velocity = {
-	angular: 0.5,
-	linear: 0.5
-};
 
 var battery = {
 	voltage: 26.0,
@@ -19,15 +12,15 @@ var ros = new ROSLIB.Ros({
 
 ros.on('connection', function() {
 	console.log('Connected to websocket server.');
-	updateTopics();
+	ROSLink.update();
 });
 
 ros.on('error', function(error) {
-	console.log('Error connecting to websocket server: ', error);
+	alert("Error connecting to websocket server:"+ error);
 });
 
 ros.on('close', function() {
-	console.log('Connection to websocket server closed.');
+	alert("Connection to websocket server closed.");
 });
 
 var cmdVel = new ROSLIB.Topic({
@@ -67,32 +60,6 @@ var rosbag_recorder = new ROSLIB.Service({
 	serviceType : 'magni_web/BagRecord'
 });
 
-function updateLinear(val){
-	velocity.linear = val;
-	document.getElementById("lineartext").innerHTML = "Linear speed: "+velocity.linear
-}
-
-function updateAngular(val){
-	velocity.angular = val;
-	document.getElementById("angulartext").innerHTML = "Angular speed: "+velocity.angular
-}
-
-function sendTwist(forward, rotate){
-	let twist = new ROSLIB.Message({
-		linear : {
-			x : forward * velocity.linear,
-			y : 0,
-			z : 0
-		},
-		angular : {
-			x : 0,
-			y : 0,
-			z : rotate * velocity.angular
-		}
-	});
-	cmdVel.publish(twist);
-}
-
 imageTopic.subscribe(function(msg) {
 	//console.log('Received message on ' + imageTopic.name + ': ' + JSON.stringify(msg.data));
 
@@ -124,38 +91,27 @@ batterytopic.subscribe(function(msg) {
 	document.getElementById("batt_percentage").innerHTML = "Percentage: "+displayperc+" %";
 });
 
+class ROSLink{
 
-
-function updateTopics() {
-
-	disk_list.callService(new ROSLIB.ServiceRequest(), function(result) {
-		let list = JSON.parse(result.lsblk).blockdevices;
-
-		drives = [];
-
-		for (let i = 0; i < list.length; i++) {
-			if(list[i].name.startsWith("sd"))
-				drives.push(list[i])
-		}
-
-		for (let i = 0; i < drives.length; i++) {
-			let tag = drives[i].name + " " + (parseInt(drives[i].size.split(",")[0])+1)+"GB ";
-
-			if(drives[i].children.length == 1){
-				let split = drives[i].children[0].mountpoint.split("/");
-				tag += split[split.length-1];
-				drives[i].path = drives[i].children[0].mountpoint;
+	static twist(forward, rotate){
+		let twist = new ROSLIB.Message({
+			linear : {
+				x : forward * settings.linear,
+				y : 0,
+				z : 0
+			},
+			angular : {
+				x : 0,
+				y : 0,
+				z : rotate * settings.angular
 			}
-			else if (drives[i].name == "sda"){
-				tag += result.homedir;
-				drives[i].path = result.homedir;
-			}
+		});
+		cmdVel.publish(twist);
+	}
 
-			drives[i].tag = tag;
-		}
-	});
+	static update(){
+		Settings.fetch();
+		Record.fetch();
+	}
+}
 
-    topicsClient.callService(new ROSLIB.ServiceRequest(), function(result) {
-	    topicsList = result.topics;
-    });
-};
