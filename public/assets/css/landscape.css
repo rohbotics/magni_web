@@ -46,9 +46,9 @@ h2 {
 
 #logo{
 	position: absolute;
-	top: 1.5vw;
-	left: 1.5vw;
-	width: 15vw;
+	top: 1vw;
+	left: 1vw;
+	height: 6vh;
 }
 
 .column {

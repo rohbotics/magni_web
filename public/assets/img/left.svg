@@ -26,7 +26,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.6"
-     inkscape:cx="51.852749"
+     inkscape:cx="21.227749"
      inkscape:cy="34.464307"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -44,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -55,13 +55,14 @@
      transform="translate(0,-282)">
     <g
        aria-label=""
-       transform="scale(-0.95505364,1.0470616)"
+       transform="matrix(-0.71629023,0,0,0.7852962,1.8750003,72.375036)"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.04749966px;line-height:1.25;font-family:FontAwesome;-inkscape-font-specification:FontAwesome;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.35118747"
        id="text818">
       <path
          d="m -0.97815331,274.37932 q 0.14894112,0.14894 0.14894112,0.35276 0,0.20381 -0.14894112,0.35275 l -4.01357129,4.01358 q -0.1489412,0.14894 -0.3527553,0.14894 -0.2038142,0 -0.3527553,-0.14894 -0.1489412,-0.14895 -0.1489412,-0.35276 v -2.00679 h -1.7559374 q -0.7682226,0 -1.3796652,0.047 -0.6036035,0.047 -1.207207,0.17246 -0.595764,0.11758 -1.042588,0.32924 -0.438984,0.21165 -0.823096,0.54873 -0.384111,0.32923 -0.62712,0.79174 -0.243009,0.45466 -0.384111,1.08178 -0.133263,0.62712 -0.133263,1.41886 0,0.43114 0.03919,0.9642 0,0.047 0.01568,0.18029 0.02352,0.14111 0.02352,0.21166 0,0.11758 -0.07055,0.19597 -0.06271,0.0784 -0.180298,0.0784 -0.125424,0 -0.219492,-0.13326 -0.05487,-0.0706 -0.101907,-0.17246 -0.04703,-0.10191 -0.109746,-0.23517 -0.05487,-0.13326 -0.07839,-0.18814 -0.995554,-2.23411 -0.995554,-3.53539 0,-1.55996 0.415467,-2.61039 1.26992,-3.15912 6.8591312,-3.15912 h 1.7559374 v -2.00678 q 0,-0.20382 0.1489412,-0.35276 0.1489411,-0.14894 0.3527553,-0.14894 0.2038141,0 0.3527553,0.14894 z"
          style="fill:#ffffff;fill-opacity:1;stroke-width:0.35118747"
-         id="path820" />
+         id="path820"
+         inkscape:connector-curvature="0" />
     </g>
   </g>
 </svg>

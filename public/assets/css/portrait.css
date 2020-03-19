@@ -11,21 +11,17 @@ h2 {
 	font-size: 5vw;
 }
 
-#pbatteryicon{
-	height: 10vw;
+.menuicon{
+	height: 6vh;
 	display: inline-block;
+	margin-top: 1vh;
+	float: left;
+	position: relative;
+	width: 33%; 
 }
 
-#precordicon{
-	height: 10vw;
-	display: inline-block;
-	margin-right: 3vw;
-}
-
-#psettingsicon{
-	height: 10vw;
-	display: inline-block;
-	margin-right: 3vw;
+#arrowpad{
+	display: block;
 }
 
 #landscape{
@@ -38,7 +34,7 @@ h2 {
 
 #pvideostream{
 	display: block;
-	width: 100vw;
+	width: 100vw; 
 	height: 100%;
 	object-fit: contain;
 }
@@ -47,10 +43,25 @@ h2 {
 	position: absolute;
 	bottom: 2vw;
 	left: 2vw;
-	width: 30vw;
+	width: 30vh;
 }
 
 .arrow {
+	display: inline-block;
+
+	float: left;
+	position: relative;
+
+	width: 33%; 
+	height: 100%;
+
+	transition: all 0.1s;
+	transform-origin: 50% 50%;
+
+	object-fit: contain;
+}
+
+.arrow2 {
 	display: inline-block;
 	left: 3vw;
 	padding: 5vw;

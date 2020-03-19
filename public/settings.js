@@ -52,16 +52,31 @@ class Settings{
 	static calibrate(){
 		settings.wheel_left = document.getElementById("leftwheel").value;
 		settings.wheel_right = document.getElementById("rightwheel").value;
+		this.reconfigure();
 		this.save();
 	}
 
-	static isJson(str) {
-		try {
-			JSON.parse(str);
-		} catch (e) {
-			return false;
-		}
-		return true;
+	static reconfigure(){
+		motor_reconfigure.callService(new ROSLIB.ServiceRequest({
+			config: {
+				bools: [],
+				ints: [],
+				strs: [],
+				doubles: [
+					{
+						name: 'left_wheel_radius_multiplier', 
+						value: settings.wheel_left
+					},
+					{
+						name: 'right_wheel_radius_multiplier', 
+						value: settings.wheel_right
+					},
+				],
+				groups: []
+			}
+		}), function(result) {
+			console.log('Result for service call on '+motor_reconfigure.name+ ': '+JSON.stringify(result, null, 2));
+		});
 	}
 
 	static fetch(){
@@ -83,13 +98,14 @@ class Settings{
 				}
 				settings = temp;
 				Settings.load();
+				Settings.reconfigure();
 				console.log("Loaded settings: "+result.load_data)
 			}
 			else{
 				console.log("Malformed settings savefile")
 			}
 
-	    });
+		});
 
 		this.load();
 	}
@@ -124,6 +140,6 @@ class Settings{
 
 		}), function(result) {
 			console.log("Saved settings.");
-	    });	
+		});	
 	}
 }

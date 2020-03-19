@@ -70,6 +70,12 @@ var settings_manager = new ROSLIB.Service({
 	serviceType : 'magni_web/Settings'
 });
 
+var motor_reconfigure = new ROSLIB.Service({
+	ros : ros,
+	name : '/ubiquity_velocity_controller/set_parameters',
+	serviceType : 'dynamic_reconfigure/Reconfigure'
+});
+
 imageTopic.subscribe(function(msg) {
 	//console.log('Received message on ' + imageTopic.name + ': ' + JSON.stringify(msg.data));
 
