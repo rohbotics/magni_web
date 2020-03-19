@@ -40,10 +40,10 @@ h2 {
 }
 
 #logo{
-	position: absolute;
-	bottom: 2vw;
-	left: 2vw;
-	width: 30vh;
+	padding-left: 10vh;
+	left: 10vh;
+	margin-left: 10vh;
+	width: 25vh;
 }
 
 .arrow {

@@ -1,6 +1,7 @@
 var inputmixer = {
 	linear: 0,
-	angular: 0
+	angular: 0,
+	touches: []
 }
 
 class Landscape{
@@ -9,9 +10,18 @@ class Landscape{
 		return document.getElementById(id);
 	}
 
-	static endpress(event){
+	static end(){
+		Visuals.unhover(document.getElementById("lleft"));
+		Visuals.unhover(document.getElementById("lright"));
+		Visuals.unhover(document.getElementById("lforward"));
+		Visuals.unhover(document.getElementById("lbackward"));
+		inputmixer.angular = inputmixer.linear = 0;
+		Twist.clear();
+	}
 
-		if(event.clientX > (event.screenX/2)){
+	static endpress(xpos){
+
+		if(xpos > (screen.width/2)){
 
 			Visuals.unhover(document.getElementById("lleft"));
 			Visuals.unhover(document.getElementById("lright"));
@@ -52,14 +62,20 @@ document.documentElement.addEventListener('mousedown', function(e){
 document.documentElement.addEventListener('mouseup', function(e){
 	if(state.is_touchscreen)
 		return;
-	Landscape.endpress(e);
+	Landscape.endpress(e.clientX);
 });
 
 document.documentElement.addEventListener('touchstart', function(e){
-	Landscape.inputmux(event.target);
+	Landscape.inputmux(e.target);
+	inputmixer.touches = e.touches;
 });
 
 document.documentElement.addEventListener('touchend', function(e){
-	Landscape.endpress();
+	if(inputmixer.touches.length > 1)
+		Landscape.endpress(inputmixer.touches.pop().clientX);
+	else
+		Landscape.end();
+
+	document.getElementById("debug").innerHTML = inputmixer.touches.length;
 });
 

@@ -6,7 +6,7 @@ var state = {
 	is_touchscreen: false,
 };
 
-var scaleSize = "scale(1.6)";
+var scaleSize = "scale(1.5)";
 
 class Visuals{
 
@@ -44,7 +44,6 @@ class Twist{
 
 document.documentElement.addEventListener('touchstart', function(e){
 	state.is_touchscreen = true;
-	scaleSize = "scale(2.0)";
 });
 
 document.documentElement.ondragstart = function () {
