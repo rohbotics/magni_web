@@ -8,6 +8,7 @@ import subprocess
 import psutil
 import signal
 
+from os import path
 from os.path import expanduser
 from magni_web.srv import BagRecord, DiskList, Settings
 
@@ -22,7 +23,13 @@ class Worker:
 		self.recording = False
 		self.proc = None
 
-		print("Bag recorder ready.")
+		self.savepath = rospy.get_param("~settings_path", "settings.cfg")
+
+		if path.exists(self.savepath):
+			with open(self.savepath, 'r') as file:
+				self.settings_json = file.read().replace('\n', '')
+		else:
+			self.settings_json = ""
 
 	def disklist(self, request):
 		proc = subprocess.Popen('lsblk -J', shell=True, stdout=subprocess.PIPE) 
@@ -51,9 +58,21 @@ class Worker:
 		return [];
 
 	def settings(self, request):
-		print(request.save_data)
-		print(request.save)
-		return ""
+
+		if request.save:
+
+			self.settings_json = request.save_data
+
+			with open(self.savepath, "w") as file:
+				file.write(self.settings_json.replace("{","{\n").replace(",",",\n").replace("}","\n}"))
+
+			return ""
+
+		if path.exists(self.savepath):
+			with open(self.savepath, 'r') as file:
+				self.settings_json = file.read().replace('\n', '')
+		
+		return self.settings_json
 
 try:
 	rec = Worker()

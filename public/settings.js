@@ -50,15 +50,45 @@ class Settings{
 	}
 
 	static calibrate(){
-		wheel_left = document.getElementById("leftwheel").value;
-		wheel_right = document.getElementById("rightwheel").value;
+		settings.wheel_left = document.getElementById("leftwheel").value;
+		settings.wheel_right = document.getElementById("rightwheel").value;
 		this.save();
+	}
+
+	static isJson(str) {
+		try {
+			JSON.parse(str);
+		} catch (e) {
+			return false;
+		}
+		return true;
 	}
 
 	static fetch(){
 
-		settings_manager.callService(new ROSLIB.ServiceRequest("", false), function(result) {
-		    console.log(result.load_data)
+		settings_manager.callService(new ROSLIB.ServiceRequest({
+			save_data: "", 
+			save: false
+
+		}), function(result) {
+
+			if(result.load_data.startsWith("{"))
+			{
+				let temp;
+				try {
+					temp = JSON.parse(result.load_data);
+				} catch (e) {
+					console.log("Malformed settings savefile.")
+					return;
+				}
+				settings = temp;
+				Settings.load();
+				console.log("Loaded settings: "+result.load_data)
+			}
+			else{
+				console.log("Malformed settings savefile")
+			}
+
 	    });
 
 		this.load();
@@ -88,11 +118,12 @@ class Settings{
 
 	static save(){
 
-		settings_manager.callService(new ROSLIB.ServiceRequest(JSON.stringify(settings), true), function(result) {
-		    console.log(result.load_data)
-	    });
+		settings_manager.callService(new ROSLIB.ServiceRequest({
+			save_data: JSON.stringify(settings), 
+			save: true
 
-		this.load();
+		}), function(result) {
+			console.log("Saved settings.");
+	    });	
 	}
-
 }

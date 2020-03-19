@@ -30,7 +30,7 @@ function endTwist(){
 		spamTwist = false;
 		forward = rotate = 0.0;
 		console.log("cmd_vel: x="+forward+" rz="+rotate);
-		sendTwist(forward, rotate);
+		ROSLink.twist(forward, rotate);
 		setHover(prevElement, false);
 	}
 }
@@ -70,7 +70,7 @@ document.documentElement.addEventListener('touchstart', function(e){
 setInterval(function(){
 	if(spamTwist){
 		console.log("cmd_vel: x="+forward+" rz="+rotate);
-		sendTwist(forward, rotate);
+		ROSLink.twist(forward, rotate);
 	}
 
 }, 100);
