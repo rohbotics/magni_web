@@ -56,4 +56,24 @@ setInterval(function(){
 		ROSLink.twist(state.linear, state.angular);
 	}
 
+
+
+console.log()
+
 }, 100);
+
+
+function addJoystick(){
+	let rect = document.getElementById("touchpad").getBoundingClientRect()
+
+	var joystick = new VirtualJoystick({
+		mouseSupport: true,
+		stationaryBase: true,
+		baseX: window.innerWidth/2,
+		baseY: (rect.bottom + rect.top)/2,
+		limitStickTravel: true,
+		stickRadius: window.innerWidth*0.3,
+	});
+}
+
+setTimeout(addJoystick,1000);

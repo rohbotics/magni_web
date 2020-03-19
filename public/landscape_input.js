@@ -21,7 +21,7 @@ class Landscape{
 
 	static endpress(xpos){
 
-		if(xpos > (screen.width/2)){
+		if(xpos > (window.innerWidth/2)){
 
 			Visuals.unhover(document.getElementById("lleft"));
 			Visuals.unhover(document.getElementById("lright"));

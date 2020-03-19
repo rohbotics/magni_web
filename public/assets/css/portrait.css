@@ -21,7 +21,7 @@ h2 {
 }
 
 #arrowpad{
-	display: block;
+	display: none;
 }
 
 #landscape{
@@ -40,10 +40,9 @@ h2 {
 }
 
 #logo{
-	padding-left: 10vh;
-	left: 10vh;
-	margin-left: 10vh;
-	width: 25vh;
+	padding-top: 1vh;
+	padding-left: 1vh;
+	width: 20vh;
 }
 
 .arrow {
