@@ -17,10 +17,14 @@ ros.on('connection', function() {
 
 ros.on('error', function(error) {
 	alert("Error connecting to websocket server:"+ error);
+	document.getElementById("pvideostream").src = "assets/img/novideo.jpg";
+	document.getElementById("lvideostream").src = "assets/img/novideo.jpg";
 });
 
 ros.on('close', function() {
 	alert("Connection to websocket server closed.");
+	document.getElementById("pvideostream").src = "assets/img/novideo.jpg";
+	document.getElementById("lvideostream").src = "assets/img/novideo.jpg";
 });
 
 var cmdVel = new ROSLIB.Topic({
@@ -58,6 +62,12 @@ var rosbag_recorder = new ROSLIB.Service({
 	ros : ros,
 	name : '/rosbag_recorder',
 	serviceType : 'magni_web/BagRecord'
+});
+
+var settings_manager = new ROSLIB.Service({
+	ros : ros,
+	name : '/settings_manager',
+	serviceType : 'magni_web/Settings'
 });
 
 imageTopic.subscribe(function(msg) {

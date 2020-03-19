@@ -12,6 +12,7 @@ add_service_files(
 	FILES
 	BagRecord.srv
 	DiskList.srv
+	Settings.srv
 )
 
 catkin_python_setup()

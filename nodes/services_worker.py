@@ -9,14 +9,15 @@ import psutil
 import signal
 
 from os.path import expanduser
-from magni_web.srv import BagRecord, DiskList
+from magni_web.srv import BagRecord, DiskList, Settings
 
-class Recorder:
+class Worker:
 	def __init__(self):
-		rospy.init_node('bag_recorder', anonymous=False)
+		rospy.init_node('web_services_worker', anonymous=False)
 
 		self.disklister = rospy.Service('disk_list', DiskList, self.disklist)
 		self.recorder = rospy.Service('rosbag_recorder', BagRecord, self.recording)
+		self.settings_manager = rospy.Service('settings_manager', Settings, self.settings)
 
 		self.recording = False
 		self.proc = None
@@ -49,8 +50,13 @@ class Recorder:
 
 		return [];
 
+	def settings(self, request):
+		print(request.save_data)
+		print(request.save)
+		return ""
+
 try:
-	rec = Recorder()
+	rec = Worker()
 	rospy.spin()
 except rospy.ROSInterruptException:
 	print("Script interrupted", file=sys.stderr)

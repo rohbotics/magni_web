@@ -59,7 +59,7 @@ class Record{
 
 		document.body.style.cursor = 'wait';
 
-		if(document.getElementById("recbutton").innerHTML == "Start Recording")
+		if(document.getElementById("recbutton").innerHTML == "Start Recording ●")
 		{
 			let savepath = document.getElementById("savepath");
 			let block = document.getElementById("rostopics");

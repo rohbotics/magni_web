@@ -13,7 +13,7 @@
 		<param name="port" value="3000" />
 	</node>
 
-	<node name="bag_recorder" pkg="magni_web" type="bag_recorder.py" output="screen">
+	<node name="services_worker" pkg="magni_web" type="services_worker.py" output="screen">
 	</node>
 
 </launch>

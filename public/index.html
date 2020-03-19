@@ -12,7 +12,8 @@
 
 <body oncontextmenu="return false">
 
-	<script src="roslib.min.js"></script>
+	<script src="lib/roslib.min.js"></script>
+	<script src="lib/virtualjoystick.js"></script>
 	<script src="settings.js"></script>
 	<script src="roslink.js"></script>
 	<script src="main.js"></script>
@@ -40,11 +41,11 @@
 
 			<label for="savepath">Save location:</label>
 			<select id="savepath">
-
+				<!-- Add path here dynamically. -->
 			</select>
 
 			<button type="button" style="color: #969696; margin-top: 5px; display: inline-block;" onclick="Settings.advanced_options()">Advanced Options</button>
-			<button id="recbutton" style="color: red; margin-top: 5px; display: inline-block;" onclick="Record.toggle()" type="button">Start Recording</button>
+			<button id="recbutton" style="color: red; margin-top: 5px; display: inline-block;" onclick="Record.toggle()" type="button">Start Recording ●</button>
 
 			<div id="advancedrec" style="display:none">
 				<p>Topics you would like to record:</p>
@@ -82,9 +83,7 @@
 			<h1>Calibration</h1>
 
 			<label for="number">Left wheel size: </label> <input id="leftwheel" type="number" min="0.9" max="1.1" step="0.001" value="1.0" size="4">  <br/>
-
 			<label for="number">Right wheel size:</label> <input id="rightwheel" type="number" min="0.9" max="1.1" step="0.001" value="1.0" size="4">  <br/>
-
 			<button id="calibrations" type="button" style="margin-top: 5px" onclick="Settings.calibrate()">Apply Calibrations</button>
 
 		</div>

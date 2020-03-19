@@ -1,0 +1,4 @@
+string save_data
+bool save
+---
+string load_data

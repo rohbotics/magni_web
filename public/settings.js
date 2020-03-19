@@ -57,11 +57,16 @@ class Settings{
 
 	static fetch(){
 
+		settings_manager.callService(new ROSLIB.ServiceRequest("", false), function(result) {
+		    console.log(result.load_data)
+	    });
+
 		this.load();
 	}
 
 	static load(){
-		console.log(settings);
+		document.getElementById("leftwheel").value = settings.wheel_left;
+		document.getElementById("rightwheel").value = settings.wheel_right;
 
 		document.getElementById("rotate_camera").checked = settings.rotate_camera;
 		document.getElementById("use_joystick").checked = settings.use_joystick;
@@ -71,12 +76,23 @@ class Settings{
 
 		document.getElementById("angulartext").innerHTML = "Angular speed: "+settings.angular;
 		document.getElementById("angularSlider").value = settings.angular;
+
+		if(settings.rotate_camera){
+			document.getElementById("pvideostream").classList.add("flip");
+			document.getElementById("lvideostream").classList.add("flip");
+		}else{
+			document.getElementById("pvideostream").classList.remove("flip");
+			document.getElementById("lvideostream").classList.remove("flip");
+		}
 	}
 
 	static save(){
-		console.log(settings);
+
+		settings_manager.callService(new ROSLIB.ServiceRequest(JSON.stringify(settings), true), function(result) {
+		    console.log(result.load_data)
+	    });
+
 		this.load();
 	}
-
 
 }
