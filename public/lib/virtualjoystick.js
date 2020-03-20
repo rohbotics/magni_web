@@ -20,7 +20,7 @@ var VirtualJoystick	= function(opts)
 	this._baseEl.style.display	= "none"
 	this._container.appendChild(this._stickEl)
 	this._stickEl.style.position	= "absolute"
-	this._stickEl.style.display	= "none"
+	this._stickEl.style.display	= ""
 
 	this._pressed	= false;
 	this._touchIdx	= null;
@@ -29,6 +29,9 @@ var VirtualJoystick	= function(opts)
 		this._baseEl.style.display	= "";
 		this._baseEl.style.left		= (this._baseX - this._baseEl.width /2)+"px";
 		this._baseEl.style.top		= (this._baseY - this._baseEl.height/2)+"px";
+		this._stickX = this._baseX;
+		this._stickY = this._baseY;
+		this._move(this._stickEl.style, (this._baseX - this._stickEl.width /2), (this._baseY - this._stickEl.height/2));
 	}
     
 	this._transform	= this._useCssTransform ? this._getTransformProperty() : false;
@@ -148,32 +151,45 @@ VirtualJoystick.prototype.left	= function(){
 VirtualJoystick.prototype._onUp	= function()
 {
 	this._pressed	= false; 
-	this._stickEl.style.display	= "none";
+	this._stickEl.style.display	= "";	
 	
 	if(this._stationaryBase == false){	
 		this._baseEl.style.display	= "none";
 	
 		this._baseX	= this._baseY	= 0;
-		this._stickX	= this._stickY	= 0;
+		this._stickX = this._stickY	= 0;
+	}else{
+		this._stickX = this._baseX;
+		this._stickY = this._baseY;
+		this._move(this._stickEl.style, (this._baseX - this._stickEl.width /2), (this._baseY - this._stickEl.height/2));
 	}
 }
 
 VirtualJoystick.prototype._onDown	= function(x, y)
 {
-	this._pressed	= true; 
-	if(this._stationaryBase == false){
+	if(this._stationaryBase == true){
+		let dx = this._baseX - x;
+		let dy = this._baseY - y;
+		let dist = Math.sqrt(dx*dx + dy*dy);
+
+		if(dist > this._stickRadius)
+			return;
+
+	}else{
 		this._baseX	= x;
 		this._baseY	= y;
 		this._baseEl.style.display	= "";
 		this._move(this._baseEl.style, (this._baseX - this._baseEl.width /2), (this._baseY - this._baseEl.height/2));
 	}
+
+	this._pressed	= true; 
 	
 	this._stickX	= x;
 	this._stickY	= y;
 	
 	if(this._limitStickTravel === true){
-		var deltaX	= this.deltaX();
-		var deltaY	= this.deltaY();
+		var deltaX = this.deltaX();
+		var deltaY = this.deltaY();
 		var stickDistance = Math.sqrt( (deltaX * deltaX) + (deltaY * deltaY) );
 		if(stickDistance > this._stickRadius){
 			var stickNormalizedX = deltaX / stickDistance;

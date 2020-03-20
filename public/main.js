@@ -7,6 +7,7 @@ var state = {
 };
 
 var scaleSize = "scale(1.5)";
+var joystick = undefined;
 
 class Visuals{
 
@@ -51,25 +52,36 @@ document.documentElement.ondragstart = function () {
 };
 
 setInterval(function(){
-	if(state.continious_sending){
-		console.log("cmd_vel: x="+state.linear+" rz="+state.angular);
+	if(settings.use_joystick && window.innerWidth < window.innerHeight){
+
+		if(joystick._pressed)
+			state.continious_sending = true;
+
+		if(state.continious_sending)
+		{
+			let ang = 0;
+			let lin = 0;
+
+			if(Math.sqrt(Math.pow(joystick.deltaX(),2) + Math.pow(joystick.deltaY(),2)) > joystick._stickRadius * 0.1)
+			{
+				ang = -joystick.deltaX()/joystick._stickRadius;
+				lin = -joystick.deltaY()/joystick._stickRadius;
+			}
+
+			if(!joystick._pressed){
+				lin = ang = 0;
+				state.continious_sending = false;
+			}
+
+			console.log("joy: lin="+lin.toFixed(2)+" ang="+ang.toFixed(2));
+			ROSLink.twist(lin, ang);
+		}
+
+	}else if(state.continious_sending){
+
+		console.log("cmd_vel: lin="+state.linear+" ang="+state.angular);
 		ROSLink.twist(state.linear, state.angular);
+
 	}
 
 }, 100);
-
-
-function addJoystick(){
-	let rect = document.getElementById("touchpad").getBoundingClientRect()
-
-	var joystick = new VirtualJoystick({
-		mouseSupport: true,
-		stationaryBase: true,
-		baseX: window.innerWidth/2,
-		baseY: (rect.bottom + rect.top)/2,
-		limitStickTravel: true,
-		stickRadius: window.innerWidth*0.3,
-	});
-}
-
-setTimeout(addJoystick,1000);

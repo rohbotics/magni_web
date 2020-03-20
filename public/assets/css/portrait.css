@@ -20,10 +20,6 @@ h2 {
 	width: 33%; 
 }
 
-#arrowpad{
-	display: none;
-}
-
 #landscape{
 	display: none;
 }
@@ -58,14 +54,4 @@ h2 {
 	transform-origin: 50% 50%;
 
 	object-fit: contain;
-}
-
-.arrow2 {
-	display: inline-block;
-	left: 3vw;
-	padding: 5vw;
-	height: 14vw;
-	width: 14vw;
-	transition: all 0.1s;
-	transform-origin: 50% 50%;
 }
