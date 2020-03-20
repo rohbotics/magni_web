@@ -30,6 +30,7 @@ class Settings{
 	static rotate_camera(checkbox){
 		settings.rotate_camera = checkbox.checked;
 		this.save();
+		this.load();
 	}
 
 	static use_joystick(checkbox){

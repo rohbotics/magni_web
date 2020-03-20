@@ -1,0 +1,17 @@
+{
+  "short_name": "Robot Commander V2",
+  "name": "Robot Commander V2",
+  "description": "Web interface for driving the Magni robot.",
+  "icons": [
+    {
+      "src": "assets/img/pwa-icon.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    }
+  ],
+  "start_url": "/index.html",
+  "background_color": "#666666",
+  "display": "fullscreen",
+  "scope": "/",
+  "theme_color": "#666666"
+}
