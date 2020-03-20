@@ -52,7 +52,21 @@ document.documentElement.ondragstart = function () {
 };
 
 setInterval(function(){
-	if(settings.use_joystick && window.innerWidth < window.innerHeight){
+
+	let portraitmode = window.innerWidth < window.innerHeight;
+
+	if(settings.use_joystick)
+	{	
+		if(portraitmode){
+			if(joystick == undefined)
+				Settings.show_joystick();
+		}else if(joystick != undefined)
+			Settings.hide_joystick();
+	}
+	else if(joystick != undefined)
+		Settings.hide_joystick();
+
+	if(settings.use_joystick && portraitmode){
 
 		if(joystick._pressed)
 			state.continious_sending = true;

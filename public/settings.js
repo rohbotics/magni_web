@@ -138,46 +138,23 @@ class Settings{
 		}
 
 		if(settings.use_joystick){
+			document.getElementById("arrows1").style.visibility = "hidden";
+			document.getElementById("arrows2").style.visibility = "hidden";
+			document.getElementById("arrows3").style.visibility = "hidden";
 
-			if(joystick == undefined)
-			{
-				document.getElementById("arrows1").style.visibility = "hidden";
-				document.getElementById("arrows2").style.visibility = "hidden";
-				document.getElementById("arrows3").style.visibility = "hidden";
-
-				let rect = document.getElementById("controlbox").getBoundingClientRect();
-
-				let radius = window.innerHeight*0.8 - window.innerWidth * 0.75;
-				if(radius > window.innerWidth*0.95)
-					radius = window.innerWidth*0.95;
-
-				var base = document.createElement("img");
-				base.src = "assets/img/joystick_base.svg";
-				base.style = "width: "+radius+"px; height: "+radius+"px;";
-
-				var stick = document.createElement("img");
-				stick.src = "assets/img/joystick_stick.svg";
-				stick.style = "width: "+radius*0.4+"px; height: "+radius*0.4+"px;";
-
-				joystick = new VirtualJoystick({
-					stickElement: stick,
-					baseElement: base,
-					mouseSupport: true,
-					stationaryBase: true,
-					baseX: window.innerWidth/2,
-					baseY: (rect.bottom + rect.top)/2,
-					limitStickTravel: true,
-					stickRadius: radius/2,
-				});
-			}
-		}
-		else if(joystick != undefined){
+			document.getElementById("larrows1").style.visibility = "hidden";
+			document.getElementById("larrows2").style.visibility = "hidden";
+			document.getElementById("joystick1").style.visibility = "";
+			document.getElementById("joystick2").style.visibility = "";
+		}else{
 			document.getElementById("arrows1").style.visibility = "";
 			document.getElementById("arrows2").style.visibility = "";
 			document.getElementById("arrows3").style.visibility = "";
 
-			joystick.destroy();
-			joystick = undefined;
+			document.getElementById("larrows1").style.visibility = "";
+			document.getElementById("larrows2").style.visibility = "";
+			document.getElementById("joystick1").style.visibility = "hidden";
+			document.getElementById("joystick2").style.visibility = "hidden";
 		}
 	}
 
@@ -190,5 +167,37 @@ class Settings{
 		}), function(result) {
 			console.log("Saved settings.");
 		});	
+	}
+
+	static show_joystick(){
+		let rect = document.getElementById("controlbox").getBoundingClientRect();
+
+		let radius = window.innerHeight*0.8 - window.innerWidth * 0.75;
+		if(radius > window.innerWidth*0.95)
+			radius = window.innerWidth*0.95;
+
+		var base = document.createElement("img");
+		base.src = "assets/img/joystick_base.svg";
+		base.style = "width: "+radius+"px; height: "+radius+"px;";
+
+		var stick = document.createElement("img");
+		stick.src = "assets/img/joystick_stick.svg";
+		stick.style = "width: "+radius*0.4+"px; height: "+radius*0.4+"px;";
+
+		joystick = new VirtualJoystick({
+			stickElement: stick,
+			baseElement: base,
+			mouseSupport: true,
+			stationaryBase: true,
+			baseX: window.innerWidth/2,
+			baseY: (rect.bottom + rect.top)/2,
+			limitStickTravel: true,
+			stickRadius: radius/2,
+		});
+	}
+
+	static hide_joystick(){
+		joystick.destroy();
+		joystick = undefined;
 	}
 }

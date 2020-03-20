@@ -79,6 +79,14 @@ h2 {
 	transform: scale(1.3);
 }
 
+.horizontal {
+	-webkit-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+}
+
 .menuicon{
 	height: 12vh;
 	display: inline-block;
@@ -87,3 +95,43 @@ h2 {
 	width: 50%; 
 }
 
+#joy_linear{
+	width: 45vh;
+	margin-left: calc(9vw - 22.5vh);
+}
+
+.linearjoy {
+  width: 95%;
+  height: 8vh;
+
+  margin-top: 28.5vh;
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+
+  border-radius: 10px;
+  background: #4d4c4c;
+  outline: none;
+  opacity: 1.0;
+
+  -webkit-appearance: none;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+.linearjoy::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10vh;
+  height: 10vh;
+  border-radius: 50%; 
+  background: white;
+  cursor: pointer;
+}
+
+.linearjoy::-moz-range-thumb {
+  width: 10vh;
+  height: 10vh;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+}
