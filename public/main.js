@@ -56,10 +56,6 @@ setInterval(function(){
 		ROSLink.twist(state.linear, state.angular);
 	}
 
-
-
-console.log()
-
 }, 100);
 
 
