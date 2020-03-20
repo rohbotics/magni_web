@@ -141,20 +141,10 @@ class Settings{
 			document.getElementById("arrows1").style.visibility = "hidden";
 			document.getElementById("arrows2").style.visibility = "hidden";
 			document.getElementById("arrows3").style.visibility = "hidden";
-
-			document.getElementById("larrows1").style.visibility = "hidden";
-			document.getElementById("larrows2").style.visibility = "hidden";
-			document.getElementById("joystick1").style.visibility = "";
-			document.getElementById("joystick2").style.visibility = "";
 		}else{
 			document.getElementById("arrows1").style.visibility = "";
 			document.getElementById("arrows2").style.visibility = "";
 			document.getElementById("arrows3").style.visibility = "";
-
-			document.getElementById("larrows1").style.visibility = "";
-			document.getElementById("larrows2").style.visibility = "";
-			document.getElementById("joystick1").style.visibility = "hidden";
-			document.getElementById("joystick2").style.visibility = "hidden";
 		}
 	}
 

@@ -82,6 +82,9 @@ setInterval(function(){
 				lin = -joystick.deltaY()/joystick._stickRadius;
 			}
 
+			if(lin < 0)
+				ang = -ang;
+
 			if(!joystick._pressed){
 				lin = ang = 0;
 				state.continious_sending = false;
