@@ -21,7 +21,7 @@ class Record{
 					tag += split[split.length-1];
 					drives[i].path = drives[i].children[0].mountpoint;
 				}
-				else if (drives[i].name == "sda"){
+				else if (drives[i].name == "sda" || drives.length == 1){
 					tag += result.homedir;
 					drives[i].path = result.homedir;
 				}

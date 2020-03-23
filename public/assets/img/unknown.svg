@@ -39,13 +39,13 @@
      inkscape:window-height="996"
      id="namedview11"
      showgrid="false"
-     inkscape:zoom="59"
-     inkscape:cx="10.136665"
-     inkscape:cy="5.5646168"
+     inkscape:zoom="5.2149125"
+     inkscape:cx="11.758382"
+     inkscape:cy="-1.9711127"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg9" />
+     inkscape:current-layer="text814" />
   <defs
      id="defs4" />
   <path
@@ -54,4 +54,13 @@
      id="Rectangle 147"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccssccccssssscc" />
+  <g
+     aria-label="?"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.10027122px;line-height:1.25;font-family:'Arial Black';-inkscape-font-specification:'Arial Black, ';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.15250678"
+     id="text814">
+    <path
+       d="M 8.3649254,5.3504039 H 7.2330391 V 5.2372153 q 0,-0.2889289 0.06553,-0.4676478 Q 7.3640996,4.58787 7.4921815,4.4389376 7.623242,4.2900052 8.0759965,3.9146955 8.317267,3.7181048 8.317267,3.5542791 q 0,-0.1638256 -0.098295,-0.2531851 -0.095317,-0.092338 -0.2919075,-0.092338 -0.211484,0 -0.3514804,0.1399965 Q 7.4385658,3.4887489 7.3998434,3.8372507 L 6.244128,3.6942756 Q 6.3037009,3.0568449 6.7058184,2.6696206 7.1109146,2.2794178 7.944936,2.2794178 q 0.6493453,0 1.0484841,0.2710569 0.542114,0.3663737 0.542114,0.9769966 0,0.2531851 -0.1399965,0.4884983 Q 9.2555412,4.2512828 8.8236372,4.5908486 8.5227937,4.8291405 8.4423702,4.9750942 8.3649254,5.1180694 8.3649254,5.3504039 Z M 7.1943167,5.6512474 H 8.4066265 V 6.720582 H 7.1943167 Z"
+       style="stroke-width:0.15250678"
+       id="path816" />
+  </g>
 </svg>

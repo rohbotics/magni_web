@@ -14,7 +14,7 @@
 	</node>
 
 	<node name="services_worker" pkg="magni_web" type="services_worker.py" output="screen">
-		<param name="settings_path" value="$(find magni_web)/settings.cfg" />
+		<param name="settings_path" value="$(env HOME)/.ros/magni_web_settings.cfg" />
 	</node>
 
 </launch>

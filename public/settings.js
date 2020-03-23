@@ -130,11 +130,11 @@ class Settings{
 		document.getElementById("angularSlider").value = settings.angular;
 
 		if(settings.rotate_camera){
-			document.getElementById("pvideostream").classList.add("flip");
-			document.getElementById("lvideostream").classList.add("flip");
-		}else{
 			document.getElementById("pvideostream").classList.remove("flip");
 			document.getElementById("lvideostream").classList.remove("flip");
+		}else{
+			document.getElementById("pvideostream").classList.add("flip");
+			document.getElementById("lvideostream").classList.add("flip");
 		}
 
 		if(settings.use_joystick){

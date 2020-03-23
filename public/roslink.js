@@ -6,25 +6,47 @@ var battery = {
 	percentage: 0.7
 };
 
+var connected = false;
+
 var ros = new ROSLIB.Ros({
 	url : 'ws://'+window.location.hostname+':'+9090
 });
 
 ros.on('connection', function() {
+
 	console.log('Connected to websocket server.');
+
+	connected = true;
+	document.getElementById("lconnstatus").innerHTML = "Connected.";
+	document.getElementById("lconnstatus").style.color = "lightgray";
+
 	ROSLink.update();
 });
 
 ros.on('error', function(error) {
-	alert("Error connecting to websocket server:"+ error);
+
+	if(connected)
+		alert("Error connecting to websocket server:"+ error);
+
 	document.getElementById("pvideostream").src = "assets/img/novideo.jpg";
 	document.getElementById("lvideostream").src = "assets/img/novideo.jpg";
+
+	connected = false;
+	document.getElementById("lconnstatus").innerHTML = "Disconnected.";
+	document.getElementById("lconnstatus").style.color = "red";
 });
 
 ros.on('close', function() {
-	alert("Connection to websocket server closed.");
+
+	if(connected)
+		alert("Connection to websocket server closed.");
+
 	document.getElementById("pvideostream").src = "assets/img/novideo.jpg";
 	document.getElementById("lvideostream").src = "assets/img/novideo.jpg";
+
+	connected = false;
+	document.getElementById("lconnstatus").innerHTML = "Disconnected.";
+	document.getElementById("lconnstatus").style.color = "red";
 });
 
 var cmdVel = new ROSLIB.Topic({
@@ -88,8 +110,8 @@ imageTopic.subscribe(function(msg) {
 batterytopic.subscribe(function(msg) {
 	//console.log('Received message on ' + batterytopic.name + ': ' + JSON.stringify(msg));
 
-	battery.voltage = parseFloat(msg.voltage) * 0.1 + battery.voltage * 0.9;
-	battery.percentage = parseFloat(msg.percentage) * 0.1 + battery.percentage * 0.9;
+	battery.voltage = parseFloat(msg.voltage) * 0.2 + battery.voltage * 0.8;
+	battery.percentage = parseFloat(msg.percentage) * 0.2 + battery.percentage * 0.8;
 
 	let displayvolt = Math.round(battery.voltage*10)/10;
 	let imageperc = Math.ceil(battery.percentage*4)*25;
@@ -110,6 +132,9 @@ batterytopic.subscribe(function(msg) {
 class ROSLink{
 
 	static twist(forward, rotate){
+		if(!connected)
+			return;
+
 		let twist = new ROSLIB.Message({
 			linear : {
 				x : forward * settings.linear,
