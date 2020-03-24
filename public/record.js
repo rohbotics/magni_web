@@ -1,6 +1,11 @@
 
 class Record{
 
+	static open(){
+		this.fetch();
+		this.populate_topics();
+	}
+
 	static fetch() {
 
 		disk_list.callService(new ROSLIB.ServiceRequest(), function(result) {
@@ -31,6 +36,7 @@ class Record{
 		});
 
 	    topicsClient.callService(new ROSLIB.ServiceRequest(), function(result) {
+	    	topicsList = [];
 		    topicsList = result.topics;
 	    });
 	};
