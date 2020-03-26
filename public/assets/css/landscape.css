@@ -28,7 +28,7 @@ h2 {
 	filter:	drop-shadow(0 -10px 0 #4d4c4c) drop-shadow(0 10px 0 #4d4c4c) drop-shadow(-10px 0 0 #4d4c4c) drop-shadow(10px 0 0 #4d4c4c);
 }
 
-#logo{
+#llogo{
 	position: absolute;
 	top: 1vw;
 	left: 1vw;

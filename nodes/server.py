@@ -11,7 +11,6 @@ import subprocess
 proc = subprocess.Popen('hostname -I', shell=True, stdout=subprocess.PIPE)
 ADDRESS = proc.communicate()[0].split(" ")[0]
 PORT = "3000"
-run = True
 
 class ServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
@@ -61,19 +60,18 @@ class ServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 			self.wfile.write(data)
 
 def kill_server():
-	run = False
 	httpd.server_close()
 
 try:
 	rospy.init_node('server', anonymous=False)
 	PORT = rospy.get_param("~port", "3000")
 
-	httpd = BaseHTTPServer.HTTPServer((ADDRESS, PORT), ServerHandler)
+	httpd = BaseHTTPServer.HTTPServer(('0.0.0.0', PORT), ServerHandler)
 	httpd.timeout = 3
 	print("Server Started - %s:%s" % (ADDRESS, PORT))
 
 	rospy.on_shutdown(kill_server)
-	while run:
+	while not rospy.is_shutdown():
 		httpd.handle_request()
 
 except rospy.ROSInterruptException:

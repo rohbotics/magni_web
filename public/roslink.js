@@ -107,6 +107,8 @@ imageTopic.subscribe(function(msg) {
 		document.getElementById("lvideostream").src = "data:image/jpg;base64,"+msg.data
 });
 
+var battery_display_image = -1
+
 batterytopic.subscribe(function(msg) {
 	//console.log('Received message on ' + batterytopic.name + ': ' + JSON.stringify(msg));
 
@@ -117,14 +119,13 @@ batterytopic.subscribe(function(msg) {
 	let imageperc = Math.ceil(battery.percentage*4)*25;
 	let displayperc = Math.round(battery.percentage*100);
 
-	let icon;
+	if(battery_display_image != imageperc)
+	{
+		battery_display_image = imageperc;
+		document.getElementById("pbatteryicon").src = "assets/img/"+imageperc+".svg";
+		document.getElementById("lbatteryicon").src = "assets/img/"+imageperc+".svg";
+	}
 
-	if(window.matchMedia("(orientation:portrait)").matches)
-		icon = document.getElementById("pbatteryicon");
-	else
-		icon = document.getElementById("lbatteryicon");
-
-	icon.src = "assets/img/"+imageperc+".svg";
 	document.getElementById("batt_voltage").innerHTML = "Voltage: "+displayvolt.toFixed(1)+" V";
 	document.getElementById("batt_percentage").innerHTML = "Percentage: "+displayperc+" %";
 });

@@ -10,7 +10,7 @@ import signal
 
 from os import path
 from os.path import expanduser
-from magni_web.srv import BagRecord, DiskList, Settings
+from avalon_web.srv import BagRecord, DiskList, Settings
 
 class Worker:
 	def __init__(self):
@@ -32,11 +32,11 @@ class Worker:
 			self.settings_json = ""
 
 	def disklist(self, request):
-		proc = subprocess.Popen('lsblk -J', shell=True, stdout=subprocess.PIPE) 
-		lsblk = proc.communicate()[0]
+		proc1 = subprocess.Popen('lsblk -J', shell=True, stdout=subprocess.PIPE) 
+		lsblk = proc1.communicate()[0]
 
-		proc = subprocess.Popen('echo $HOME', shell=True, stdout=subprocess.PIPE) 
-		homedir = proc.communicate()[0]
+		proc1 = subprocess.Popen('echo $HOME', shell=True, stdout=subprocess.PIPE) 
+		homedir = proc1.communicate()[0]
 
 		return [lsblk, homedir]
 
@@ -44,15 +44,12 @@ class Worker:
 
 		if request.start:
 
-			command = '/opt/ros/kinetic/bin/rosbag record -b 512 -q -o ' + request.path.replace("\n","") +"/rec " + " ".join(request.topics)
+			command = '/opt/ros/kinetic/bin/rosbag record -q /topic __name:=recording_bag -o ' + request.path.replace("\n","") +"/rec " + " ".join(request.topics)
 			self.proc = subprocess.Popen(command, stdin=subprocess.PIPE, shell=True, cwd="/tmp/")
 
 		elif self.proc != None:
 			
-			process = psutil.Process(self.proc.pid)
-			for subProcess in process.children(recursive=True):
-				subProcess.send_signal(signal.SIGINT)
-			self.proc.wait()
+			subprocess.Popen('rosnode kill recording_bag', shell=True, stdout=subprocess.PIPE) 
 			self.proc = None
 
 		return [];

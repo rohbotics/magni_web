@@ -16,7 +16,11 @@ class Record{
 			for (let i = 0; i < list.length; i++) {
 				if(list[i].name.startsWith("sd"))
 					drives.push(list[i])
+				if(list[i].name.startsWith("mmcblk"))
+					drives.unshift(list[i])
 			}
+
+			let homedirfound = false;
 
 			for (let i = 0; i < drives.length; i++) {
 				let tag = drives[i].name + " " + (parseInt(drives[i].size.split(",")[0])+1)+"GB ";
@@ -26,9 +30,15 @@ class Record{
 					tag += split[split.length-1];
 					drives[i].path = drives[i].children[0].mountpoint;
 				}
-				else if (drives[i].name == "sda" || drives.length == 1){
+				else if (drives[i].name == "mmcblk0"){
+					tag = "Pi_SD " + (parseInt(drives[i].size.split(",")[0])+1)+"GB " + result.homedir;
+					drives[i].path = result.homedir;
+					homedirfound = true;
+				}
+				else if (drives[i].name == "sda" && !homedirfound){
 					tag += result.homedir;
 					drives[i].path = result.homedir;
+					homedirfound = true;
 				}
 
 				drives[i].tag = tag;
@@ -36,7 +46,6 @@ class Record{
 		});
 
 	    topicsClient.callService(new ROSLIB.ServiceRequest(), function(result) {
-	    	topicsList = [];
 		    topicsList = result.topics;
 	    });
 	};
@@ -102,7 +111,7 @@ class Record{
 
 			}), function(result) {
 				document.body.style.cursor = 'default';
-				document.getElementById("recbutton").innerHTML = "Start Recording"
+				document.getElementById("recbutton").innerHTML = "Start Recording ●"
 				document.getElementById("lrecordicon").src = "assets/img/record_off.svg";
 				document.getElementById("precordicon").src = "assets/img/record_off.svg";
 				Modal.close("recordModal");

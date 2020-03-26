@@ -8,7 +8,15 @@
 	<link rel="stylesheet" type="text/css" media="screen and (orientation:landscape)" href="assets/css/landscape.css" />
 	<link rel="icon" type="image/png" href="assets/img/icon.png">
 	<meta name="viewport" content="width=device-width, user-scalable=no">
-	<link rel="manifest" href="/manifest.json">
+	<link rel="manifest" href="manifest.json">
+	<link rel="icon" href="assets/img/pwa_icons/48x48.png" sizes="48x48" />
+	<link rel="icon" href="assets/img/pwa_icons/72x72.png" sizes="72x72" />
+	<link rel="icon" href="assets/img/pwa_icons/96x96.png" sizes="96x96" />
+	<link rel="icon" href="assets/img/pwa_icons/128x128.png" sizes="128x128" />
+	<link rel="icon" href="assets/img/pwa_icons/144x144.png" sizes="144x144" />
+	<link rel="icon" href="assets/img/pwa_icons/192x192.png" sizes="192x192" />
+	<link rel="icon" href="assets/img/pwa_icons/256x256.png" sizes="256x256" />
+	<link rel="icon" href="assets/img/pwa_icons/512x512.png" sizes="512x512" />
 </head>
 
 <body oncontextmenu="return false">
@@ -101,40 +109,40 @@
 	<div id="portrait">
 
 		<div style="width:100%; height:40%;">
-			<img id="pvideostream" class="flip noselect" src="assets/img/novideo.jpg">
+			<img alt="" id="pvideostream" class="flip noselect" src="assets/img/novideo.jpg">
 		</div>
 
 		<div style="width:100%; height:8vh; background-color: #4d4c4c; border-bottom: 1px solid gray;">
 				
-			<img id="psettingsicon" class="zoom menuicon" src="assets/img/settings.svg" onclick="Modal.open('settingsModal'); Settings.load();">
-			<img id="precordicon" class="zoom menuicon" src="assets/img/record_off.svg" onclick="Modal.open('recordModal'); Record.open();">
-			<img id="pbatteryicon" class="zoom menuicon" src="assets/img/unknown.svg" onclick="Modal.open('batteryModal');">
+			<img alt="" id="psettingsicon" class="zoom menuicon" src="assets/img/settings.svg" onclick="Modal.open('settingsModal'); Settings.load();">
+			<img alt="" id="precordicon" class="zoom menuicon" src="assets/img/record_off.svg" onclick="Modal.open('recordModal'); Record.open();">
+			<img alt="" id="pbatteryicon" class="zoom menuicon" src="assets/img/unknown.svg" onclick="Modal.open('batteryModal');">
 
 		</div>
 
 		<div id="controlbox" style="width:100%; height:calc(85vh - 75vw);">
 
 			<div id="arrows1" style="width:100%; height:33%;">
-				<img id="pforward_left" class="arrow noselect zoom" src="assets/img/left.svg">
-				<img id="pforward" class="arrow noselect zoom" src="assets/img/arrow.svg">
-				<img id="pforward_right" class="arrow noselect zoom" src="assets/img/right.svg">
+				<img alt="" id="pforward_left" class="arrow noselect zoom" src="assets/img/left.svg">
+				<img alt="" id="pforward" class="arrow noselect zoom" src="assets/img/arrow.svg">
+				<img alt="" id="pforward_right" class="arrow noselect zoom" src="assets/img/right.svg">
 			</div>
 
 			<div id="arrows2" style="width:100%; height:33%;">
-				<img id="pleft" class="arrow noselect zoom" src="assets/img/left_circle.svg">
-				<img id="pstop" class="arrow noselect zoom" src="assets/img/stop.svg">
-				<img id="pright" class="arrow noselect zoom" src="assets/img/right_circle.svg">
+				<img alt="" id="pleft" class="arrow noselect zoom" src="assets/img/left_circle.svg">
+				<img alt="" id="pstop" class="arrow noselect zoom" src="assets/img/stop.svg">
+				<img alt="" id="pright" class="arrow noselect zoom" src="assets/img/right_circle.svg">
 			</div>
 
 			<div id="arrows3" style="width:100%; height:33%;">
-				<img id="pbackward_left" class="arrow noselect zoom" src="assets/img/leftdown.svg">
-				<img id="pbackward" class="arrow noselect zoom" src="assets/img/arrowdown.svg">
-				<img id="pbackward_right" class="arrow noselect zoom" src="assets/img/rightdown.svg">
+				<img alt="" id="pbackward_left" class="arrow noselect zoom" src="assets/img/leftdown.svg">
+				<img alt="" id="pbackward" class="arrow noselect zoom" src="assets/img/arrowdown.svg">
+				<img alt="" id="pbackward_right" class="arrow noselect zoom" src="assets/img/rightdown.svg">
 			</div>
 
 		</div>		
 
-		<img id="logo" class="noselect" src="assets/img/logo.png">
+		<img alt="" id="plogo" class="noselect" src="assets/img/logo.png">
 
 	</div>
 
@@ -143,7 +151,7 @@
 		<div class="column" style="width: 20%;">
 
 			<div style="position:absolute; top:5vw; width:18vw; height: 20vh;">
-				<img id="lbatteryicon" style="width: 100%;" class="zoom menuicon" src="assets/img/unknown.svg" onclick="Modal.open('batteryModal');">
+				<img alt="" id="lbatteryicon" style="width: 100%;" class="zoom menuicon" src="assets/img/unknown.svg" onclick="Modal.open('batteryModal');">
 			</div>
 
 			<div id="joystick1" style="position: absolute; bottom: 0; width:18vw; height: 60vh;">
@@ -153,14 +161,14 @@
 		</div>
 
 		<div class="column" style="width: 60%;">
-			<img id="lvideostream" class="flip noselect" src="assets/img/novideo.jpg">
+			<img alt="" id="lvideostream" class="flip noselect" src="assets/img/novideo.jpg">
 		</div>
 
 		<div class="column" style="width: 20%;">
 
 			<div style="position:absolute; top:5vw; width:18vw; right: 0; height: 20vh;">
-				<img id="lrecordicon" class="zoom menuicon" src="assets/img/record_off.svg" onclick="Modal.open('recordModal'); Record.open();">
-				<img id="lsettingsicon" class="zoom menuicon" src="assets/img/settings.svg" onclick="Modal.open('settingsModal'); Settings.load();">
+				<img alt="" id="lrecordicon" class="zoom menuicon" src="assets/img/record_off.svg" onclick="Modal.open('recordModal'); Record.open();">
+				<img alt="" id="lsettingsicon" class="zoom menuicon" src="assets/img/settings.svg" onclick="Modal.open('settingsModal'); Settings.load();">
 			</div> 
 
 			<div id="joystick2" style="position: absolute; bottom: 0; right: 0; width:18vw;  height: 60vh;">
@@ -170,7 +178,7 @@
 		</div>
 
 		<div style="position: static; width:100%; height:3.5vw; background-color: #4d4c4c; border-bottom: 2px solid gray;">
-			<img id="logo" class="noselect" src="assets/img/logo.png">
+			<img alt="" id="llogo" class="noselect" src="assets/img/logo.png">
 		</div>
 
 		<h1 id="lconnstatus" class="noselect" style="position: fixed; top: 0; right: 1vw; font-size: 1.5vw; color: red;" >Disconnected.</h1>
