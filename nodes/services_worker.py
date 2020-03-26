@@ -10,7 +10,7 @@ import signal
 
 from os import path
 from os.path import expanduser
-from avalon_web.srv import BagRecord, DiskList, Settings
+from magni_web.srv import BagRecord, DiskList, Settings
 
 class Worker:
 	def __init__(self):
