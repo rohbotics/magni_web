@@ -55,6 +55,13 @@ class Portrait {
 
 		document.documentElement.addEventListener('mouseup', on_unpress);
 		document.documentElement.addEventListener('touchend', on_unpress);
+
+		// Needed for Joystick support on mouse based systems
+		// Moving the joystick gets interpreted as a drag-and-drop event and
+		// doesn't trigger the mouseup
+		document.documentElement.ondragstart = function () {	
+			return false;	
+		};
 	}
 
 	bind_joystick = (input_handler, reset_handler) => {
