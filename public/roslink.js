@@ -49,18 +49,6 @@ ros.on('close', function() {
 	document.getElementById("lconnstatus").style.color = "red";
 });
 
-var cmdVel = new ROSLIB.Topic({
-	ros : ros,
-	name : '/cmd_vel',
-	messageType : 'geometry_msgs/Twist'
-});
-
-var batterytopic = new ROSLIB.Topic({
-	ros : ros,
-	name : '/battery_state',
-	messageType : 'sensor_msgs/BatteryState'
-});
-
 var imageTopic = new ROSLIB.Topic({
 	ros : ros,
 	name : '/raspicam_node/image/compressed',
@@ -107,49 +95,7 @@ imageTopic.subscribe(function(msg) {
 		document.getElementById("lvideostream").src = "data:image/jpg;base64,"+msg.data
 });
 
-var battery_display_image = -1
-
-batterytopic.subscribe(function(msg) {
-	//console.log('Received message on ' + batterytopic.name + ': ' + JSON.stringify(msg));
-
-	battery.voltage = parseFloat(msg.voltage) * 0.2 + battery.voltage * 0.8;
-	battery.percentage = parseFloat(msg.percentage) * 0.2 + battery.percentage * 0.8;
-
-	let displayvolt = Math.round(battery.voltage*10)/10;
-	let imageperc = Math.ceil(battery.percentage*4)*25;
-	let displayperc = Math.round(battery.percentage*100);
-
-	if(battery_display_image != imageperc)
-	{
-		battery_display_image = imageperc;
-		document.getElementById("pbatteryicon").src = "assets/img/"+imageperc+".svg";
-		document.getElementById("lbatteryicon").src = "assets/img/"+imageperc+".svg";
-	}
-
-	document.getElementById("batt_voltage").innerHTML = "Voltage: "+displayvolt.toFixed(1)+" V";
-	document.getElementById("batt_percentage").innerHTML = "Percentage: "+displayperc+" %";
-});
-
-class ROSLink{
-
-	static twist(forward, rotate){
-		if(!connected)
-			return;
-
-		let twist = new ROSLIB.Message({
-			linear : {
-				x : forward * settings.linear,
-				y : 0,
-				z : 0
-			},
-			angular : {
-				x : 0,
-				y : 0,
-				z : rotate * settings.angular
-			}
-		});
-		cmdVel.publish(twist);
-	}
+class ROSLink {
 
 	static update(){
 		Settings.fetch();
