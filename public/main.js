@@ -14,20 +14,6 @@ class Twist {
 
 	}
 
-	set = (linear, angular) => {
-		this.linear = linear;
-		this.angular = angular;
-		this.continious_sending = true;
-		this.twist(linear,angular);
-	}
-
-	clear = () => {
-		if(!this.continious_sending) return;
-		this.continious_sending = false;
-		this.linear = this.angular = 0.0;
-		this.twist(0, 0);
-	}
-
 	twist = (forward, rotate) => {
 		if(!connected) return;
 
@@ -46,6 +32,22 @@ class Twist {
 		this.cmdVel.publish(twist);
 	}
 
+	clear = () => {
+		if(!this.continious_sending) return;
+
+		this.continious_sending = false;
+		this.linear = this.angular = 0.0;
+		this.twist(0, 0);
+	}
+
+
+	send = (linear, angular) => {
+		this.linear = linear;
+		this.angular = angular;
+		this.continious_sending = true;
+		this.twist(linear,angular);
+	}
+
 	continious_send = () => {
 		if(this.continious_sending) {
 			this.twist(this.linear,this.angular);
@@ -61,15 +63,18 @@ window.addEventListener('load', function() {
 	var twist = new Twist('/cmd_vel');
 
 	var landscape_input = new Landscape();
-	landscape_input.bind_sliders(twist.set, twist.clear);
+	landscape_input.bind_sliders(twist.send, twist.clear);
 
 	var portrait_input = new Portrait();
-	portrait_input.bind_buttons(twist.set, twist.clear);
-	portrait_input.bind_joystick(twist.set, twist.clear);
+	portrait_input.bind_buttons(twist.send, twist.clear);
+	portrait_input.bind_joystick(twist.send, twist.clear);
 
 	var battery_state = new BatteryState('/battery_state');
 	var battery_view = new BatteryView();
 	battery_state.bind_update(battery_view.update, 0.02);
+
+
+	var videostream = new VideoStream();
 });
 
 

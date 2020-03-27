@@ -1,55 +1,55 @@
-var scaleSize = "scale(1.5)";
-class Visuals{
-
-	static hover(el){
-		el.style.transform = scaleSize;
-		el.style.webkitTransform = scaleSize;
-		el.style.msTransform  = scaleSize;
-	}
-
-	static unhover(el){
-		el.style.transform = "scale(1.0)";
-		el.style.webkitTransform = "scale(1.0)";
-		el.style.msTransform  = "scale(1.0)";
-	}
-
-}
 
 // Joystick is still global state because settings interacts with it
 var joystick = undefined;
+
 class Portrait {
+
 	constructor() {
 		this.portrait_last_pressed = undefined;
+	}
+
+	hover(el){
+		el.style.transform = "scale(1.5)";
+		el.style.webkitTransform = "scale(1.5)";
+		el.style.msTransform  = "scale(1.5)";
+	}
+
+	unhover(el){
+		el.style.transform = "scale(1.0)";
+		el.style.webkitTransform = "scale(1.0)";
+		el.style.msTransform  = "scale(1.0)";
 	}
 
 	bind_buttons = (input_handler, reset_handler) => {
 		var on_press = (e) => {
 			var target = event.target
 			switch(target.id){
-				case "pforward_left": 	input_handler(1,1);	break;
-				case "pforward":	input_handler(1,0);	break;
+				case "pforward_left": 	input_handler(1,1);		break;
+				case "pforward":		input_handler(1,0);		break;
 				case "pforward_right":	input_handler(1,-1);	break;
 
-				case "pleft":		input_handler(0,1);	break;
-				case "pstop":		input_handler(0,0);	break;
-				case "pright":		input_handler(0,-1);	break;
+				case "pleft":			input_handler(0,1);		break;
+				case "pstop":			input_handler(0,0);		break;
+				case "pright":			input_handler(0,-1);	break;
 
 				case "pbackward_left":	input_handler(-1,-1);	break;
-				case "pbackward":	input_handler(-1,0);	break;
+				case "pbackward":		input_handler(-1,0);	break;
 				case "pbackward_right":	input_handler(-1,1);	break;
 				default: return;
 			}
 
-			Visuals.hover(target);
+			hover(target);
 			this.portrait_last_pressed = target;
 		}
+
 		var on_unpress = (e) => {
 			if(this.portrait_last_pressed != undefined){
-				Visuals.unhover(this.portrait_last_pressed);
+				unhover(this.portrait_last_pressed);
 				this.portrait_last_pressed = undefined;
 				reset_handler();
 			}
 		}
+
 		document.documentElement.addEventListener('mousedown', on_press);
 		document.documentElement.addEventListener('touchstart', on_press);
 

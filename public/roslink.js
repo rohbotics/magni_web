@@ -1,11 +1,6 @@
 var topicsList = [];
 var drives = [];
 
-var battery = {
-	voltage: 26.0,
-	percentage: 0.7
-};
-
 var connected = false;
 
 var ros = new ROSLIB.Ros({
@@ -20,7 +15,8 @@ ros.on('connection', function() {
 	document.getElementById("lconnstatus").innerHTML = "Connected.";
 	document.getElementById("lconnstatus").style.color = "lightgray";
 
-	ROSLink.update();
+	Settings.fetch();
+	Record.fetch();
 });
 
 ros.on('error', function(error) {
@@ -94,12 +90,3 @@ imageTopic.subscribe(function(msg) {
 	else
 		document.getElementById("lvideostream").src = "data:image/jpg;base64,"+msg.data
 });
-
-class ROSLink {
-
-	static update(){
-		Settings.fetch();
-		Record.fetch();
-	}
-}
-
