@@ -1,104 +1,134 @@
+class Twist {
+	constructor(twist_topic) {
+		this.continious_sending = false;
+		this.linear = 0.0;
+		this.angular = 0.0;
+		window.setInterval(this.continious_send.bind(this), 100);
 
-var state = {
-	linear: 0.0,
-	angular: 0.0,
-	continious_sending: false,
-	is_touchscreen: false,
-};
+		this.cmdVel = new ROSLIB.Topic({
+			ros : ros,
+			name : twist_topic,
+			messageType : 'geometry_msgs/Twist'
+		});
 
-var scaleSize = "scale(1.5)";
-var joystick = undefined;
+	};
 
-class Visuals{
-
-	static hover(el){
-		el.style.transform = scaleSize;
-		el.style.webkitTransform = scaleSize;
-		el.style.msTransform  = scaleSize;
+	set = (linear, angular) => {
+		this.linear = linear;
+		this.angular = angular;
+		this.continious_sending = true;
+		this.twist(linear,angular);
 	}
 
-	static unhover(el){
-		el.style.transform = "scale(1.0)";
-		el.style.webkitTransform = "scale(1.0)";
-		el.style.msTransform  = "scale(1.0)";
+	clear = () => {
+		if(!this.continious_sending) return;
+		this.continious_sending = false;
+		this.linear = this.angular = 0.0;
+		this.twist(0, 0);
 	}
 
-}
+	twist = (forward, rotate) => {
+		if(!connected) return;
 
-class Twist{
-
-	static set(linear, angular){
-		state.linear = linear;
-		state.angular = angular;
-		state.continious_sending = true;
+		let twist = new ROSLIB.Message({
+			linear : {
+				x : forward * settings.linear,
+				y : 0,
+				z : 0
+			},
+			angular : {
+				x : 0,
+				y : 0,
+				z : rotate * settings.angular
+			}
+		});
+		this.cmdVel.publish(twist);
 	}
 
-	static clear(){
-		if(state.continious_sending){
-
-			state.continious_sending = false;
-			state.linear = state.angular = 0.0;
-			ROSLink.twist(0, 0);
+	continious_send = () => {
+		if(this.continious_sending) {
+			this.twist(this.linear,this.angular);
 		}
 	}
 }
 
-document.documentElement.addEventListener('touchstart', function(e){
-	state.is_touchscreen = true;
+class BatteryState {
+	constructor(battery_topic) {
+		this.prev_percentage = -1
+		this.prev_voltage = -1
+
+		this.batterytopic = new ROSLIB.Topic({
+			ros : ros,
+			name : battery_topic,
+			messageType : 'sensor_msgs/BatteryState'
+		});
+	}
+
+	// Bind an update function to be called when the battery hits a certain level
+	bind_update = (callback, threshold) => {
+		this.batterytopic.subscribe(function(msg) {
+			//console.log('Received message on ' + batterytopic.name + ': ' + JSON.stringify(msg));
+			let voltage = 0.0
+			let percentage = 0.0
+
+			if (this.prev_percentage > 0) {
+				voltage = parseFloat(msg.voltage) * 0.4 + this.prev_voltage * 0.6;
+				percentage = parseFloat(msg.percentage) * 0.4 + this.prev_percentage * 0.6;
+			}
+			else {
+				voltage = parseFloat(msg.voltage);
+				percentage = parseFloat(msg.percentage);
+			}
+
+			if (Math.abs(this.prev_percentage - percentage) >= threshold) {
+				callback(voltage, percentage)
+			}
+			this.prev_percentage = percentage
+			this.prev_voltage = voltage
+
+		}.bind(this));
+	}
+}
+
+class BatteryView {
+	constructor() {
+		this.display_image = -1;
+		this.pbatteryicon = document.getElementById('pbatteryicon');
+		this.lbatteryicon = document.getElementById('lbatteryicon');
+		this.modal_voltage = document.getElementById("batt_voltage");
+		this.modal_percentage = document.getElementById("batt_voltage");
+	}
+
+	update = (voltage, percentage) => {
+		let displayvolt = Math.round(voltage*10)/10;
+		let imageperc = Math.ceil(percentage*4)*25;
+		let displayperc = Math.round(percentage*100);
+
+		if(this.display_image != imageperc) {
+			this.display_image = imageperc;
+			this.pbatteryicon.src = "assets/img/"+imageperc+".svg";
+			this.lbatteryicon.src = "assets/img/"+imageperc+".svg";
+		}
+
+		this.modal_voltage.innerHTML = "Voltage: "+displayvolt.toFixed(1)+" V";
+		this.modal_percentage.innerHTML = "Percentage: "+displayperc+" %";
+	}
+}
+
+// Serves the purpose of the Controller for now, we
+// don't need anything more complex yet
+// Connect the Views and the Models
+window.addEventListener('load', function() {
+	var twist = new Twist('/cmd_vel');
+	var landscape_input = new Landscape();
+	landscape_input.bind_sliders(twist.set, twist.clear);
+	var portrait_input = new Portrait();
+	portrait_input.bind_buttons(twist.set, twist.clear);
+	portrait_input.bind_joystick(twist.set, twist.clear);
+
+	var battery_state = new BatteryState('/battery_state');
+	var battery_view = new BatteryView();
+	battery_state.bind_update(battery_view.update, 0.02);
 });
 
-document.documentElement.ondragstart = function () {
-	return false;
-};
 
-setInterval(function(){
-
-	let portraitmode = window.innerWidth < window.innerHeight;
-
-	if(settings.use_joystick)
-	{	
-		if(portraitmode){
-			if(joystick == undefined)
-				Settings.show_joystick();
-		}else if(joystick != undefined)
-			Settings.hide_joystick();
-	}
-	else if(joystick != undefined)
-		Settings.hide_joystick();
-
-	if(settings.use_joystick && portraitmode){
-
-		if(joystick._pressed)
-			state.continious_sending = true;
-
-		if(state.continious_sending)
-		{
-			let ang = 0;
-			let lin = 0;
-
-			if(Math.sqrt(Math.pow(joystick.deltaX(),2) + Math.pow(joystick.deltaY(),2)) > joystick._stickRadius * 0.1)
-			{
-				ang = -joystick.deltaX()/joystick._stickRadius;
-				lin = -joystick.deltaY()/joystick._stickRadius;
-			}
-
-			if(lin < 0)
-				ang = -ang;
-
-			if(!joystick._pressed){
-				lin = ang = 0;
-				state.continious_sending = false;
-			}
-
-			console.log("joy: lin="+lin.toFixed(2)+" ang="+ang.toFixed(2));
-			ROSLink.twist(lin, ang);
-		}
-
-	}else if(state.continious_sending){
-
-		console.log("cmd_vel: lin="+state.linear+" ang="+state.angular);
-		ROSLink.twist(state.linear, state.angular);
-
-	}
-
-}, 100);
