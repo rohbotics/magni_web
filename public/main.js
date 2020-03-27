@@ -73,6 +73,9 @@ window.addEventListener('load', function() {
 	portrait_input.bind_buttons(twist.continious_send, twist.clear);
 	portrait_input.bind_joystick(twist.send, twist.clear);
 
+	var keyboard_input = new KeyboardTeleop();
+	keyboard_input.bind_buttons(twist.send, twist.clear);
+
 	var battery_state = new BatteryState('/battery_state');
 	var battery_view = new BatteryView();
 	battery_state.bind_update(battery_view.update, 0.02);
