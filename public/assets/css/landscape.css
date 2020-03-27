@@ -26,6 +26,7 @@ h2 {
 	height: 100vh;
 	object-fit: contain;
 	filter:	drop-shadow(0 -10px 0 #4d4c4c) drop-shadow(0 10px 0 #4d4c4c) drop-shadow(-10px 0 0 #4d4c4c) drop-shadow(10px 0 0 #4d4c4c);
+	cursor: pointer;
 }
 
 #llogo{
@@ -53,6 +54,7 @@ h2 {
 	transform-origin: 50% 50%;
 
 	object-fit: contain;
+	cursor: pointer;
 }
 
 .arrowhoriz {
@@ -68,6 +70,7 @@ h2 {
 	transform-origin: 50% 50%;
 
 	object-fit: contain;
+	cursor: pointer;
 }
 
 
@@ -93,6 +96,7 @@ h2 {
 	float: left;
 	position: relative;
 	width: 50%; 
+	cursor: pointer;
 }
 
 #joy_linear{
